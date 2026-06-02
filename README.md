@@ -1,6 +1,6 @@
 # GetSetPixel
 
-GetSetPixel is a visual algorithm-learning game inspired by pixel art and programming puzzles. World 1 focuses on pattern generation with a single API: `setPixel(x, y, color)`.
+GetSetPixel is a visual coding puzzle game inspired by pixel art and programming puzzles.
 
 ## Stack
 
@@ -22,9 +22,3 @@ Pyodide assets are copied into `public/pyodide` during `postinstall` for offline
 ```bash
 npm run postinstall
 ```
-
-## Development Notes
-
-- World 1 only. No World 2/3 scaffolding.
-- Levels live in `src/game/world1Levels.ts`.
-- Rendering lives in `src/engine` and `src/components`.
