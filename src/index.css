@@ -1,0 +1,66 @@
+:root {
+  color-scheme: dark;
+
+  /* Dracula */
+  --bg: #282a36;
+  --panel: #303341;
+  --panel-strong: #44475a;
+  --surface: #343746;
+
+  --border: #44475a;
+  --border-strong: #6272a4;
+
+  --text: #f8f8f2;
+  --text-muted: #8f99b6;
+
+  /* Dracula Pink */
+  --accent: #ff79c6;
+
+  /* Dracula Green & Red */
+  --success: #50fa7b;
+  --danger: #ff5555;
+  
+  font-family: "JetBrains Mono", monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  background: var(--bg);
+  color: var(--text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+#root {
+  min-height: 0;
+}
+
+button,
+input,
+textarea {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0.3em 0;
+}

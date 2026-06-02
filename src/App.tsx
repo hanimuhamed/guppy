@@ -1,0 +1,454 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import type { MouseEvent as ReactMouseEvent } from 'react'
+import './App.css'
+import type { PixelBuffer } from './engine/pixelBuffer'
+import { world1Levels } from './game/world1Levels'
+import { judgeBuffers } from './judge/judge'
+import { runLevelCode, warmupPyWorker } from './runtime/runner'
+import { loadSaveState, saveState } from './storage/saveSystem'
+import CanvasPanel from './components/CanvasPanel'
+import DimensionControls from './components/DimensionControls'
+import EditorPanel from './components/EditorPanel'
+import LevelList from './components/LevelList'
+
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
+
+const pickInitialLevel = (savedId: string | null) => {
+  if (savedId && world1Levels.some((level) => level.id === savedId)) {
+    return savedId
+  }
+  return world1Levels[0]?.id ?? ''
+}
+
+const getDefaultDimensions = (levelId: string) => {
+  const level = world1Levels.find((entry) => entry.id === levelId)
+  if (!level) {
+    return { width: 5, height: 5 }
+  }
+  const width = clamp(
+    Math.round((level.minimumWidth + level.maximumWidth) / 2),
+    level.minimumWidth,
+    level.maximumWidth,
+  )
+  const height = clamp(
+    Math.round((level.minimumHeight + level.maximumHeight) / 2),
+    level.minimumHeight,
+    level.maximumHeight,
+  )
+  return { width, height }
+}
+
+
+function App() {
+  const saved = useMemo(() => loadSaveState(), [])
+  const [activeLevelId, setActiveLevelId] = useState(pickInitialLevel(saved.activeLevelId))
+  const [codeByLevel, setCodeByLevel] = useState<Record<string, string>>(saved.levelCode)
+  const [dimensionsByLevel, setDimensionsByLevel] = useState(saved.levelDimensions)
+  const [code, setCode] = useState('')
+  const [width, setWidth] = useState(5)
+  const [height, setHeight] = useState(5)
+  const [outputBuffer, setOutputBuffer] = useState<PixelBuffer | null>(null)
+  const [status, setStatus] = useState<'idle' | 'running' | 'passed' | 'failed' | 'error'>('idle')
+  const [message, setMessage] = useState('Ready.')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [stats, setStats] = useState<{
+    mismatchCount: number
+    totalPixels: number
+    correctCount: number
+    accuracy: number
+  } | null>(null)
+  const [completedLevels, setCompletedLevels] = useState(new Set(saved.completedLevels))
+  const [unlockedLevels, setUnlockedLevels] = useState(new Set(world1Levels.map((level) => level.id)))
+  const [leftWidth, setLeftWidth] = useState<number | null>(null)
+  const [autoRunEnabled, setAutoRunEnabled] = useState(false)
+
+  const runIdRef = useRef(0)
+  const codeRef = useRef(code)
+  const lastSavedRef = useRef('')
+  const saveTimeoutRef = useRef<number | null>(null)
+  const idleCallbackRef = useRef<number | null>(null)
+  const splitRef = useRef<HTMLDivElement | null>(null)
+
+  const activeLevel = useMemo(
+    () => world1Levels.find((level) => level.id === activeLevelId) ?? world1Levels[0],
+    [activeLevelId],
+  )
+
+  const referenceBuffer = useMemo(() => {
+    if (!activeLevel) {
+      return null
+    }
+    return activeLevel.referenceGenerator(width, height)
+  }, [activeLevel, width, height])
+
+
+  useEffect(() => {
+    if (!activeLevel) {
+      return
+    }
+    const savedDims = dimensionsByLevel[activeLevel.id]
+    const defaults = getDefaultDimensions(activeLevel.id)
+    setWidth(clamp(savedDims?.width ?? defaults.width, activeLevel.minimumWidth, activeLevel.maximumWidth))
+    setHeight(clamp(savedDims?.height ?? defaults.height, activeLevel.minimumHeight, activeLevel.maximumHeight))
+    setCode(codeByLevel[activeLevel.id] ?? activeLevel.starterCode)
+    setOutputBuffer(null)
+    setStatus('idle')
+    setMessage('Ready.')
+    setErrorMessage(null)
+    setStats(null)
+  }, [activeLevelId, activeLevel])
+
+  useEffect(() => {
+    if (!activeLevelId) {
+      return
+    }
+    setCodeByLevel((prev) => ({ ...prev, [activeLevelId]: code }))
+  }, [activeLevelId, code])
+
+  useEffect(() => {
+    if (!activeLevel) {
+      return
+    }
+    setDimensionsByLevel((prev) => ({
+      ...prev,
+      [activeLevel.id]: { width, height },
+    }))
+  }, [activeLevel, width, height])
+
+  const persist = () => {
+    const payload = {
+      activeLevelId,
+      levelCode: codeByLevel,
+      completedLevels: Array.from(completedLevels),
+      unlockedLevels: Array.from(unlockedLevels),
+      levelDimensions: dimensionsByLevel,
+    }
+    const serialized = JSON.stringify(payload)
+    if (serialized === lastSavedRef.current) {
+      return
+    }
+    lastSavedRef.current = serialized
+    saveState(payload)
+  }
+
+  useEffect(() => {
+    if (!activeLevelId) {
+      return
+    }
+    if (saveTimeoutRef.current !== null) {
+      window.clearTimeout(saveTimeoutRef.current)
+    }
+    if (idleCallbackRef.current !== null) {
+      window.cancelIdleCallback?.(idleCallbackRef.current)
+    }
+
+    saveTimeoutRef.current = window.setTimeout(() => {
+      if (window.requestIdleCallback) {
+        idleCallbackRef.current = window.requestIdleCallback(() => {
+          persist()
+        })
+      } else {
+        persist()
+      }
+    }, 1600)
+
+    return () => {
+      if (saveTimeoutRef.current !== null) {
+        window.clearTimeout(saveTimeoutRef.current)
+      }
+      if (idleCallbackRef.current !== null) {
+        window.cancelIdleCallback?.(idleCallbackRef.current)
+      }
+    }
+  }, [activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+        event.preventDefault()
+        persist()
+        setMessage('Saved.')
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
+
+  const evaluateHiddenTests = async () => {
+    if (!activeLevel) {
+      return true
+    }
+    for (const test of activeLevel.hiddenTestCases) {
+      const expected = activeLevel.referenceGenerator(test.width, test.height)
+      const output = await runLevelCode(code, test.width, test.height)
+      const result = judgeBuffers(expected, output)
+      if (!result.match) {
+        return false
+      }
+    }
+    return true
+  }
+
+  const runProgram = async (reason: 'manual' | 'auto' | 'dimension') => {
+    if (!activeLevel || !referenceBuffer) {
+      return
+    }
+    if (!autoRunEnabled && reason !== 'manual') {
+      return
+    }
+    const runId = runIdRef.current + 1
+    runIdRef.current = runId
+    const isManual = reason === 'manual'
+    if (isManual) {
+      setStatus('running')
+      setErrorMessage(null)
+      setMessage('Running Python...')
+    }
+
+    try {
+      const output = await runLevelCode(code, width, height)
+      if (runId !== runIdRef.current) {
+        return
+      }
+      const result = judgeBuffers(referenceBuffer, output)
+      setOutputBuffer(output)
+      setStats({
+        mismatchCount: result.mismatchCount,
+        totalPixels: result.totalPixels,
+        correctCount: result.correctCount,
+        accuracy: result.accuracy,
+      })
+      setErrorMessage(null)
+
+      const hiddenPass = isManual ? await evaluateHiddenTests() : true
+      if (runId !== runIdRef.current) {
+        return
+      }
+
+      if (isManual) {
+        if (result.match && hiddenPass) {
+          const nextCompleted = new Set(completedLevels)
+          nextCompleted.add(activeLevel.id)
+          setCompletedLevels(nextCompleted)
+
+          const nextUnlocked = new Set(unlockedLevels)
+          const currentIndex = world1Levels.findIndex((level) => level.id === activeLevel.id)
+          if (currentIndex >= 0 && currentIndex < world1Levels.length - 1) {
+            nextUnlocked.add(world1Levels[currentIndex + 1].id)
+          }
+          setUnlockedLevels(nextUnlocked)
+
+          setStatus('passed')
+          setMessage('All tests passed.')
+        } else if (!result.match) {
+          setStatus('failed')
+          setMessage('Visible output does not match the reference.')
+        } else {
+          setStatus('failed')
+          setMessage('Hidden tests failed. Try more sizes.')
+        }
+      }
+    } catch (error) {
+      if (runId !== runIdRef.current) {
+        return
+      }
+      if (isManual) {
+        setStatus('error')
+        setErrorMessage(error instanceof Error ? error.message : 'Unknown error')
+        setMessage('Python error.')
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!activeLevel) {
+      return
+    }
+    void runProgram('dimension')
+  }, [width, height, activeLevelId, autoRunEnabled])
+
+  useEffect(() => {
+    if (!activeLevel) {
+      return
+    }
+    if (codeRef.current === code) {
+      return
+    }
+    codeRef.current = code
+    if (!autoRunEnabled) {
+      return
+    }
+    const handle = window.setTimeout(() => {
+      void runProgram('auto')
+    }, 500)
+    return () => window.clearTimeout(handle)
+  }, [code, activeLevelId, autoRunEnabled])
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      setAutoRunEnabled(true)
+    }, 800)
+    return () => window.clearTimeout(handle)
+  }, [])
+
+  useEffect(() => {
+    if (!splitRef.current || leftWidth !== null) {
+      return
+    }
+    const width = splitRef.current.clientWidth
+    if (width > 0) {
+      setLeftWidth(Math.floor(width / 3))
+    }
+  }, [leftWidth])
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      void warmupPyWorker()
+    }, 200)
+    return () => window.clearTimeout(handle)
+  }, [])
+
+  const startResize = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    const startX = event.clientX
+    const startLeft = leftWidth ?? (splitRef.current?.clientWidth ?? 0) / 2
+    const splitWidth = splitRef.current?.clientWidth ?? 0
+
+    const onMove = (moveEvent: MouseEvent) => {
+      const nextLeft = clamp(startLeft + (moveEvent.clientX - startX), 320, splitWidth - 320)
+      setLeftWidth(nextLeft)
+    }
+
+    const onStop = () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onStop)
+    }
+
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onStop)
+  }
+
+  const onReset = () => {
+    if (!activeLevel) {
+      return
+    }
+    setCode(activeLevel.starterCode)
+    setMessage('Reset to starter code.')
+  }
+
+  if (!activeLevel) {
+    return <div className="app-shell">No levels available.</div>
+  }
+
+  const accuracyPercent = stats ? (stats.accuracy * 100).toFixed(1) : '0.0'
+  const accuracy = Number(accuracyPercent);
+
+  const getAccuracyColor = (accuracy) => {
+    if (accuracy == 100) return "#50fa7b"; // bright green
+    if (accuracy >= 98) return "#92c287"; // green
+    if (accuracy >= 95) return "#b6b083"; // lime
+    if (accuracy >= 90) return "#c4a682"; // yellow
+    if (accuracy >= 80) return "#d19c80"; // amber
+    if (accuracy >= 60) return "#dd907e"; // orange
+    if (accuracy >= 30) return "#e8847c"; // red
+    return "#ff5555"; // dark red
+  };
+
+  return (
+    <div className="app-shell">
+      <header className="app-header">
+        <div>
+          <h1>GetSetPixel</h1>
+        </div>
+        <LevelList
+          levels={world1Levels}
+          activeId={activeLevelId}
+          completed={completedLevels}
+          unlocked={unlockedLevels}
+          onSelect={(id) => {
+            if (!unlockedLevels.has(id)) {
+              return
+            }
+            setActiveLevelId(id)
+          }}
+        />
+        <div className="header-meta">
+          <span>Pyodide + Monaco</span>
+        </div>
+      </header>
+      {/* <p1 className="world-indicator">World 1: Pattern Generation</p1> */}
+      
+      <main className="main-split" ref={splitRef}>
+        <section className="left-panel" style={{ width: leftWidth ? `${leftWidth}px` : '50%' }}>
+          <div className="panel left-panel-inner">
+            <div className="section">
+              <h1>{activeLevel.index}. {activeLevel.title}</h1>
+              <div className={`difficulty-pill difficulty-pill--${activeLevel.difficulty.toLowerCase()}`}>
+                {activeLevel.difficulty}
+              </div>
+              <div className="section-title"><span>Description</span></div>
+              <p>{activeLevel.description}</p>
+            </div>
+
+            <div className="section">
+              <CanvasPanel title="Reference" buffer={referenceBuffer} embedded />
+              <CanvasPanel title="Output" buffer={outputBuffer} embedded />
+            </div>
+
+            <DimensionControls
+              width={width}
+              height={height}
+              minWidth={activeLevel.minimumWidth}
+              maxWidth={activeLevel.maximumWidth}
+              minHeight={activeLevel.minimumHeight}
+              maxHeight={activeLevel.maximumHeight}
+              onWidthChange={(value) => setWidth(clamp(value, activeLevel.minimumWidth, activeLevel.maximumWidth))}
+              onHeightChange={(value) => setHeight(clamp(value, activeLevel.minimumHeight, activeLevel.maximumHeight))}
+            />
+
+            <div className="section">
+              <div className="section-title">Accuracy</div>
+              <div className="accuracy-row">
+                <div className="accuracy-chip accuracy-chip--correct">
+                  <span className="accuracy-chip__label">Correct</span>
+                  <span className="accuracy-chip__value">{stats?.correctCount ?? 0}</span>
+                </div>
+                <div className="accuracy-chip accuracy-chip--incorrect">
+                  <span className="accuracy-chip__label">Wrong</span>
+                  <span className="accuracy-chip__value">{stats?.mismatchCount ?? 0}</span>
+                </div>
+                <div className="accuracy-chip accuracy-chip--pct">
+                  <span className="accuracy-chip__label">Accuracy</span>
+                  <span
+                    className="accuracy-chip__value"
+                    style={{ color: getAccuracyColor(accuracy) }}
+                  >
+                    {accuracyPercent}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="divider vertical" onMouseDown={startResize} />
+
+        <section className="right-panel">
+          <EditorPanel
+            code={code}
+            onChange={setCode}
+            isRunning={status === 'running'}
+            status={status}
+            message={message}
+            modelPath={activeLevelId}
+            errorMessage={errorMessage}
+            onReset={onReset}
+            onRun={() => runProgram('manual')}
+          />
+        </section>
+      </main>
+    </div>
+  )
+}
+
+export default App

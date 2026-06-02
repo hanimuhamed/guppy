@@ -1,0 +1,131 @@
+import { Suspense, lazy } from 'react'
+import type * as monaco from 'monaco-editor'
+//import nordTheme from '../themes/Nord.json'
+import draculaTheme from '../themes/Dracula.json'
+
+const MonacoEditor = lazy(() => import('@monaco-editor/react'))
+
+//let nordThemeLoaded = false
+let draculaThemeLoaded = false
+
+type EditorPanelProps = {
+  code: string
+  onChange: (value: string) => void
+  isRunning: boolean
+  status: 'idle' | 'running' | 'passed' | 'failed' | 'error'
+  message: string
+  modelPath: string
+  errorMessage: string | null
+  onReset: () => void
+  onRun: () => void
+}
+
+const EditorPanel = ({
+  code,
+  onChange,
+  isRunning,
+  status,
+  message,
+  modelPath,
+  errorMessage,
+  onReset,
+  onRun,
+}: EditorPanelProps) => {
+  //const [editorReady, setEditorReady] = useState(false)
+
+  /*const fallback = (
+    <textarea
+      className="editor-fallback"
+      value={code}
+      onChange={(event) => onChange(event.target.value)}
+      spellCheck={false}
+    />
+  )*/
+
+  return (
+    <div className="panel editor-panel">
+      <div className="panel-header">
+        <span>Editor</span>
+        <div className="panel-actions">
+          {isRunning ? <span className="pill">Running...</span> : null}
+          <button
+            type="button"
+            className="icon-button icon-button--run"
+            onClick={onRun}
+            disabled={isRunning}
+            aria-label="Run code"
+            title="Run (Ctrl+Enter)"
+          >
+            {/* Play triangle */}
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <polygon
+                points="5,3 21,12 5,21"
+                fill="white"
+              />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="icon-button"
+            onClick={onReset}
+            disabled={isRunning}
+            aria-label="Reset code"
+            title="Reset to starter code"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M3 12a9 9 0 1 0 3-6.7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M5 3v4h5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div className="editor-body">
+        {/* !editorReady ? fallback : null */}
+        <Suspense fallback={null}>
+          <MonacoEditor
+            height="100%"
+            defaultLanguage="python"
+            theme="dracula"
+            path={`${modelPath}.py`}
+            value={code}
+            onChange={(value) => onChange(value ?? '')}
+            beforeMount={(monacoInstance: typeof monaco) => {
+              if (draculaThemeLoaded) {
+                return
+              }
+              monacoInstance.editor.defineTheme('dracula', draculaTheme as monaco.editor.IStandaloneThemeData)
+              draculaThemeLoaded = true
+            }}
+            //onMount={() => setEditorReady(true)}
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              scrollbar: { vertical: 'auto', horizontal: 'auto' },
+            }}
+          />
+        </Suspense>
+      </div>
+      {status !== 'idle' || errorMessage ? (
+        <div className={`editor-status editor-status--${status}`}>
+          <div>{errorMessage ?? message}</div>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+export default EditorPanel
