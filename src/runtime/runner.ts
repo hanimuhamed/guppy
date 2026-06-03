@@ -90,12 +90,14 @@ export const warmupPyWorker = async () => {
   }
 }
 
+
+
 export const runLevelCode = async (code: string, width: number, height: number) => {
   const currentWorker = ensureWorker()
   await initWorker()
   const id = nextId
   nextId += 1
-
+  console.count("runProgram");
   const buffer = await new Promise<Uint8ClampedArray>((resolve, reject) => {
     const timeout = window.setTimeout(() => {
       pending.delete(id)

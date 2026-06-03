@@ -5,28 +5,34 @@ const black = { r: 0, g: 0, b: 0, a: 255 }
 const white = { r: 255, g: 255, b: 255, a: 255 }
 const blue = { r: 0, g: 85, b: 164, a: 255 }
 const red = { r: 220, g: 36, b: 31, a: 255 }
+const yellow = { r: 255, g: 215, b: 0, a: 255 }
+const purple = { r: 128, g: 0, b: 255, a: 255 }
+const green = { r: 34, g: 177, b: 76, a: 255 }
+const cyan = { r: 0, g: 255, b: 255, a: 255 }
+const orange = { r: 255, g: 140, b: 0, a: 255 }
+const lightOrange = { r: 255, g: 200, b: 120, a: 255 }
+const grey = { r: 128, g: 128, b: 128, a: 255 }
 
 const createBuffer = (width: number, height: number) => new PixelBuffer(width, height, white)
 
 export const world1Levels: LevelDefinition[] = [
   {
-    id: 'w1-single-pixel',
+    id: 'w1-center-dot',
     index: 1,
-    title: 'Single Pixel',
-    description: 'Set the center pixel to black using setPixel(x, y, color).',
+    title: 'Dot',
+    description: 'Place a single yellow pixel at the exact center of the canvas. Use setPixel(x, y, \'#RRGGBB\') to set the pixel color at position (x, y). Try clicking a pixel on the reference image to see its coordinates and copy the color code.',
     difficulty: 'Easy',
     minimumWidth: 3,
     maximumWidth: 15,
     minimumHeight: 3,
     maximumHeight: 15,
-    starterCode: `def solve(width, height):
-    # Use #000000 for black.
-    # Example: setPixel(0, 0, '#000000')
-    pass
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
-      buffer.setPixel(Math.floor(width / 2), Math.floor(height / 2), black)
+      buffer.setPixel(Math.floor(width / 2), Math.floor(height / 2), yellow)
       return buffer
     },
     hiddenTestCases: [
@@ -35,168 +41,80 @@ export const world1Levels: LevelDefinition[] = [
     ],
   },
   {
-    id: 'w1-horizontal-line',
+    id: 'w1-border',
     index: 2,
-    title: 'Horizontal Line',
-    description: 'Draw a black line across the middle row.',
+    title: 'Border',
+    description: 'Draw a 1-pixel green border around the entire canvas edge.',
     difficulty: 'Easy',
     minimumWidth: 3,
     maximumWidth: 25,
     minimumHeight: 3,
-    maximumHeight: 15,
-    starterCode: `def solve(width, height):
-    # Draw a line across the middle row.
-    # Hint: loop over x.
-    pass
-`,
-    referenceGenerator: (width, height) => {
-      const buffer = createBuffer(width, height)
-      const y = Math.floor(height / 2)
-      for (let x = 0; x < width; x += 1) {
-        buffer.setPixel(x, y, black)
-      }
-      return buffer
-    },
-    hiddenTestCases: [
-      { width: 5, height: 5 },
-      { width: 20, height: 7 },
-    ],
-  },
-  {
-    id: 'w1-vertical-line',
-    index: 3,
-    title: 'Vertical Line',
-    description: 'Draw a black line down the middle column.',
-    difficulty: 'Easy',
-    minimumWidth: 3,
-    maximumWidth: 15,
-    minimumHeight: 3,
     maximumHeight: 25,
-    starterCode: `def solve(width, height):
-    # Draw a line down the middle column.
-    # Hint: loop over y.
-    pass
-`,
-    referenceGenerator: (width, height) => {
-      const buffer = createBuffer(width, height)
-      const x = Math.floor(width / 2)
-      for (let y = 0; y < height; y += 1) {
-        buffer.setPixel(x, y, black)
-      }
-      return buffer
-    },
-    hiddenTestCases: [
-      { width: 7, height: 5 },
-      { width: 9, height: 21 },
-    ],
-  },
-  {
-    id: 'w1-border',
-    index: 4,
-    title: 'Border',
-    description: 'Draw a 1-pixel black border around the grid.',
-    difficulty: 'Easy',
-    minimumWidth: 3,
-    maximumWidth: 30,
-    minimumHeight: 3,
-    maximumHeight: 30,
-    starterCode: `def solve(width, height):
-    # Draw the outer border in black.
-    pass
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
       for (let x = 0; x < width; x += 1) {
-        buffer.setPixel(x, 0, black)
-        buffer.setPixel(x, height - 1, black)
+        buffer.setPixel(x, 0, green)
+        buffer.setPixel(x, height - 1, green)
       }
       for (let y = 0; y < height; y += 1) {
-        buffer.setPixel(0, y, black)
-        buffer.setPixel(width - 1, y, black)
+        buffer.setPixel(0, y, green)
+        buffer.setPixel(width - 1, y, green)
       }
       return buffer
     },
     hiddenTestCases: [
-      { width: 4, height: 9 },
+      { width: 5, height: 9 },
       { width: 17, height: 11 },
     ],
   },
   {
-    id: 'w1-french-flag',
-    index: 5,
-    title: 'French Flag',
-    description: 'Draw vertical stripes: blue, white, red.',
-    difficulty: 'Medium',
-    minimumWidth: 3,
-    maximumWidth: 30,
-    minimumHeight: 3,
-    maximumHeight: 30,
-    starterCode: `def solve(width, height):
-    # Split width into thirds for blue, white, red.
-    pass
-`,
-    referenceGenerator: (width, height) => {
-      const buffer = createBuffer(width, height)
-      const third = Math.round(width / 3)
-      for (let x = 0; x < width; x += 1) {
-        const color = x < third ? blue : x < width - third ? white : red
-        for (let y = 0; y < height; y += 1) {
-          buffer.setPixel(x, y, color)
-        }
-      }
-      return buffer
-    },
-    hiddenTestCases: [
-      { width: 6, height: 9 },
-      { width: 25, height: 10 },
-    ],
-  },
-  {
-    id: 'w1-england-flag',
-    index: 6,
-    title: 'England Flag',
-    description: 'Draw a red cross centered on a white field.',
-    difficulty: 'Medium',
+    id: 'w1-cross',
+    index: 3,
+    title: 'Cross',
+    description: 'Draw a red plus-shaped cross with lines running through the center of the canvas.',
+    difficulty: 'Easy',
     minimumWidth: 5,
-    maximumWidth: 35,
+    maximumWidth: 25,
     minimumHeight: 5,
-    maximumHeight: 35,
-    starterCode: `def solve(width, height):
-    # Draw a centered red cross.
-    pass
+    maximumHeight: 25,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
       const midX = Math.floor(width / 2)
       const midY = Math.floor(height / 2)
-      const thickness = Math.max(1, Math.floor(Math.min(width, height) / 5))
       for (let x = 0; x < width; x += 1) {
-        for (let y = 0; y < height; y += 1) {
-          if (Math.abs(x - midX) < thickness || Math.abs(y - midY) < thickness) {
-            buffer.setPixel(x, y, red)
-          }
-        }
+        buffer.setPixel(x, midY, red)
+      }
+      for (let y = 0; y < height; y += 1) {
+        buffer.setPixel(midX, y, red)
       }
       return buffer
     },
     hiddenTestCases: [
-      { width: 9, height: 9 },
-      { width: 27, height: 19 },
+      { width: 7, height: 11 },
+      { width: 17, height: 21 },
     ],
   },
   {
     id: 'w1-checkerboard',
-    index: 7,
+    index: 4,
     title: 'Checkerboard',
-    description: 'Alternating black and white cells.',
+    description: 'Fill the canvas with alternating black and white cells.',
     difficulty: 'Easy',
     minimumWidth: 4,
-    maximumWidth: 50,
+    maximumWidth: 24,
     minimumHeight: 4,
-    maximumHeight: 50,
-    starterCode: `def solve(width, height):
-    # Alternate colors using (x + y) % 2.
-    pass
+    maximumHeight: 24,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
@@ -210,54 +128,53 @@ export const world1Levels: LevelDefinition[] = [
       return buffer
     },
     hiddenTestCases: [
-      { width: 5, height: 7 },
-      { width: 41, height: 36 },
+      { width: 6, height: 10 },
+      { width: 20, height: 18 },
     ],
   },
   {
-    id: 'w1-cross',
-    index: 8,
-    title: 'Cross',
-    description: 'Draw a plus-shaped cross in black.',
-    difficulty: 'Easy',
+    id: 'w1-x-shape',
+    index: 5,
+    title: 'X',
+    description: 'Draw both diagonals of the canvas in green to form an X.',
+    difficulty: 'Medium',
     minimumWidth: 5,
-    maximumWidth: 40,
+    maximumWidth: 25,
     minimumHeight: 5,
-    maximumHeight: 40,
-    starterCode: `def solve(width, height):
-    # Draw vertical and horizontal lines crossing at the center.
-    pass
+    maximumHeight: 25,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
-      const midX = Math.floor(width / 2)
-      const midY = Math.floor(height / 2)
-      for (let x = 0; x < width; x += 1) {
-        buffer.setPixel(x, midY, black)
-      }
       for (let y = 0; y < height; y += 1) {
-        buffer.setPixel(midX, y, black)
+        for (let x = 0; x < width; x += 1) {
+          if (x === y || x === width - y - 1) {
+            buffer.setPixel(x, y, green)
+          }
+        }
       }
       return buffer
     },
     hiddenTestCases: [
-      { width: 7, height: 11 },
-      { width: 33, height: 21 },
+      { width: 7, height: 7 },
+      { width: 25, height: 19 },
     ],
   },
   {
-    id: 'w1-diamond',
-    index: 9,
+    id: 'w1-filled-diamond',
+    index: 6,
     title: 'Diamond',
-    description: 'Draw a diamond outline centered in the grid.',
-    difficulty: 'Hard',
+    description: 'Fill a diamond shape centered in the canvas.',
+    difficulty: 'Medium',
     minimumWidth: 7,
     maximumWidth: 41,
     minimumHeight: 7,
     maximumHeight: 41,
-    starterCode: `def solve(width, height):
-    # Manhattan distance from center defines the diamond.
-    pass
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
@@ -267,8 +184,8 @@ export const world1Levels: LevelDefinition[] = [
       for (let y = 0; y < height; y += 1) {
         for (let x = 0; x < width; x += 1) {
           const dist = Math.abs(x - cx) + Math.abs(y - cy)
-          if (dist === radius) {
-            buffer.setPixel(x, y, black)
+          if (dist <= radius) {
+            buffer.setPixel(x, y, cyan)
           }
         }
       }
@@ -280,18 +197,47 @@ export const world1Levels: LevelDefinition[] = [
     ],
   },
   {
-    id: 'w1-circle',
-    index: 10,
-    title: 'Circle',
-    description: 'Draw a circle outline centered in the grid.',
+    id: 'w1-concentric-rectangles',
+    index: 7,
+    title: 'Rectangles',
+    description: 'Draw nested rectangular rings alternating between purple and yellow.',
+    difficulty: 'Medium',
+    minimumWidth: 5,
+    maximumWidth: 45,
+    minimumHeight: 5,
+    maximumHeight: 45,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
+`,
+    referenceGenerator: (width, height) => {
+      const buffer = createBuffer(width, height)
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          const layer = Math.min(x, y, width - x - 1, height - y - 1)
+          buffer.setPixel(x, y, layer % 2 === 0 ? purple : yellow)
+        }
+      }
+      return buffer
+    },
+    hiddenTestCases: [
+      { width: 9, height: 5 },
+      { width: 29, height: 19 },
+    ],
+  },
+  {
+    id: 'w1-filled-circle',
+    index: 8,
+    title: 'Ball',
+    description: 'Fill a circle centered in the canvas.',
     difficulty: 'Hard',
     minimumWidth: 9,
     maximumWidth: 45,
     minimumHeight: 9,
     maximumHeight: 45,
-    starterCode: `def solve(width, height):
-    # Use a radius based on the smaller dimension.
-    pass
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
@@ -302,9 +248,8 @@ export const world1Levels: LevelDefinition[] = [
         for (let x = 0; x < width; x += 1) {
           const dx = x - cx
           const dy = y - cy
-          const dist = Math.round(Math.sqrt(dx * dx + dy * dy))
-          if (dist === radius) {
-            buffer.setPixel(x, y, black)
+          if (Math.sqrt(dx * dx + dy * dy) < radius + 1) {
+            buffer.setPixel(x, y, blue)
           }
         }
       }
@@ -313,6 +258,85 @@ export const world1Levels: LevelDefinition[] = [
     hiddenTestCases: [
       { width: 11, height: 11 },
       { width: 37, height: 29 },
+    ],
+  },
+  {
+    id: 'w1-grid',
+    index: 9,
+    title: 'Grid',
+    description: 'Draw evenly spaced grey grid lines on a white background. Spacing scales with canvas size.',
+    difficulty: 'Hard',
+    minimumWidth: 11,
+    maximumWidth: 55,
+    minimumHeight: 11,
+    maximumHeight: 55,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
+`,
+    referenceGenerator: (width, height) => {
+      const buffer = createBuffer(width, height)
+      const spacing = Math.max(2, Math.floor(Math.min(width, height) / 5))
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          if (x % spacing === 0 || y % spacing === 0) {
+            buffer.setPixel(x, y, grey)
+          }
+        }
+      }
+      return buffer
+    },
+    hiddenTestCases: [
+      { width: 21, height: 15 },
+      { width: 45, height: 41 },
+    ],
+  },
+  {
+    id: 'w1-citrus-slice',
+    index: 10,
+    title: 'Citrus',
+    description:
+      'Draw an orange slice: an orange outer circle, a light orange inner circle, and white cross + diagonal dividers.',
+    difficulty: 'Hard',
+    minimumWidth: 17,
+    maximumWidth: 55,
+    minimumHeight: 17,
+    maximumHeight: 55,
+    starterCode: `def solve(width: int, height: int) -> None:
+    # Your code goes here.
+    return
+`,
+    referenceGenerator: (width, height) => {
+      const buffer = createBuffer(width, height)
+      const cx = Math.floor(width / 2)
+      const cy = Math.floor(height / 2)
+      const outerRadius = Math.min(cx, cy)
+      const innerRadius = outerRadius - 2
+ 
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          const dx = x - cx
+          const dy = y - cy
+          const dist = Math.sqrt(dx * dx + dy * dy)
+ 
+          if (dist < outerRadius + 1) {
+            buffer.setPixel(x, y, orange)
+          }
+          if (dist < innerRadius + 1) {
+            buffer.setPixel(x, y, lightOrange)
+            const onCross = dy === 0 || dx === 0
+            const onDiag = dx === dy || dx === -dy
+            if (onCross || onDiag) {
+              buffer.setPixel(x, y, white)
+            }
+          }
+        }
+      }
+      return buffer
+    },
+    hiddenTestCases: [
+      { width: 21, height: 17 },
+      { width: 35, height: 45 },
     ],
   },
 ]

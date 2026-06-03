@@ -1,3 +1,4 @@
+//pyWorker.ts
 import { loadPyodide, type PyodideInterface } from 'pyodide'
 
 type InitRequest = { type: 'init'; id: number }
@@ -94,6 +95,8 @@ const formatPythonError = (message: string) => {
   return lastLine
 }
 
+
+
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   const message = event.data
   if (message.type === 'init') {
@@ -141,7 +144,11 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
       buffer[idx + 2] = color.b
       buffer[idx + 3] = color.a
     })
-
+    /*console.log(pyodide.runPython(`
+import gc
+len(globals())
+`))*/
+    console.count("worker run");
     await pyodide.runPythonAsync(code)
     const solve = pyodide.globals.get('solve')
     if (!solve) {

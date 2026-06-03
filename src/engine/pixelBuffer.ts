@@ -1,3 +1,4 @@
+// pixelBuffer.ts
 export type RgbaColor = { r: number; g: number; b: number; a: number }
 
 const clamp8 = (value: number) => Math.min(255, Math.max(0, Math.round(value)))

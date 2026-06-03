@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'getsetpixel:save-v1'
 
 export type SaveState = {
+  currentWorld: number
   activeLevelId: string | null
   levelCode: Record<string, string>
   completedLevels: string[]
@@ -9,6 +10,7 @@ export type SaveState = {
 }
 
 const defaultState: SaveState = {
+  currentWorld: 1,
   activeLevelId: null,
   levelCode: {},
   completedLevels: [],
@@ -24,6 +26,9 @@ export const loadSaveState = (): SaveState => {
     }
     const parsed = JSON.parse(raw) as SaveState
     return {
+      currentWorld: Number.isInteger(parsed.currentWorld) && parsed.currentWorld >= 1 && parsed.currentWorld <= 10
+        ? parsed.currentWorld
+        : 1,
       activeLevelId: parsed.activeLevelId ?? null,
       levelCode: parsed.levelCode ?? {},
       completedLevels: parsed.completedLevels ?? [],

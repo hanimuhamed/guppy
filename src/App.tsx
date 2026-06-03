@@ -3,6 +3,16 @@ import type { MouseEvent as ReactMouseEvent } from 'react'
 import './App.css'
 import type { PixelBuffer } from './engine/pixelBuffer'
 import { world1Levels } from './game/world1Levels'
+import { world2Levels } from './game/world2Levels'
+import { world3Levels } from './game/world3Levels'
+import { world4Levels } from './game/world4Levels'
+import { world5Levels } from './game/world5Levels'
+import { world6Levels } from './game/world6Levels'
+import { world7Levels } from './game/world7Levels'
+import { world8Levels } from './game/world8Levels'
+import { world9Levels } from './game/world9Levels'
+import { world10Levels } from './game/world10Levels'
+import type { LevelDefinition } from './game/types'
 import { judgeBuffers } from './judge/judge'
 import { runLevelCode, warmupPyWorker } from './runtime/runner'
 import { loadSaveState, saveState } from './storage/saveSystem'
@@ -10,18 +20,32 @@ import CanvasPanel from './components/CanvasPanel'
 import DimensionControls from './components/DimensionControls'
 import EditorPanel from './components/EditorPanel'
 import LevelList from './components/LevelList'
+import WorldsList from './components/WorldsList'
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 
-const pickInitialLevel = (savedId: string | null) => {
-  if (savedId && world1Levels.some((level) => level.id === savedId)) {
+const worlds: LevelDefinition[][] = [
+  world1Levels,
+  world2Levels,
+  world3Levels,
+  world4Levels,
+  world5Levels,
+  world6Levels,
+  world7Levels,
+  world8Levels,
+  world9Levels,
+  world10Levels,
+]
+
+const pickInitialLevel = (levels: LevelDefinition[], savedId: string | null) => {
+  if (savedId && levels.some((level) => level.id === savedId)) {
     return savedId
   }
-  return world1Levels[0]?.id ?? ''
+  return levels[0]?.id ?? ''
 }
 
-const getDefaultDimensions = (levelId: string) => {
-  const level = world1Levels.find((entry) => entry.id === levelId)
+const getDefaultDimensions = (levels: LevelDefinition[], levelId: string) => {
+  const level = levels.find((entry) => entry.id === levelId)
   if (!level) {
     return { width: 5, height: 5 }
   }
@@ -41,7 +65,9 @@ const getDefaultDimensions = (levelId: string) => {
 
 function App() {
   const saved = useMemo(() => loadSaveState(), [])
-  const [activeLevelId, setActiveLevelId] = useState(pickInitialLevel(saved.activeLevelId))
+  const [currentWorld, setCurrentWorld] = useState(saved.currentWorld)
+  const activeLevels = worlds[currentWorld - 1] ?? worlds[0]
+  const [activeLevelId, setActiveLevelId] = useState(pickInitialLevel(activeLevels, saved.activeLevelId))
   const [codeByLevel, setCodeByLevel] = useState<Record<string, string>>(saved.levelCode)
   const [dimensionsByLevel, setDimensionsByLevel] = useState(saved.levelDimensions)
   const [code, setCode] = useState('')
@@ -58,7 +84,7 @@ function App() {
     accuracy: number
   } | null>(null)
   const [completedLevels, setCompletedLevels] = useState(new Set(saved.completedLevels))
-  const [unlockedLevels, setUnlockedLevels] = useState(new Set(world1Levels.map((level) => level.id)))
+  const [unlockedLevels, setUnlockedLevels] = useState(new Set(activeLevels.map((level) => level.id)))
   const [leftWidth, setLeftWidth] = useState<number | null>(null)
   const [autoRunEnabled, setAutoRunEnabled] = useState(false)
 
@@ -70,8 +96,8 @@ function App() {
   const splitRef = useRef<HTMLDivElement | null>(null)
 
   const activeLevel = useMemo(
-    () => world1Levels.find((level) => level.id === activeLevelId) ?? world1Levels[0],
-    [activeLevelId],
+    () => activeLevels.find((level) => level.id === activeLevelId) ?? activeLevels[0],
+    [activeLevelId, activeLevels],
   )
 
   const referenceBuffer = useMemo(() => {
@@ -87,7 +113,7 @@ function App() {
       return
     }
     const savedDims = dimensionsByLevel[activeLevel.id]
-    const defaults = getDefaultDimensions(activeLevel.id)
+    const defaults = getDefaultDimensions(activeLevels, activeLevel.id)
     setWidth(clamp(savedDims?.width ?? defaults.width, activeLevel.minimumWidth, activeLevel.maximumWidth))
     setHeight(clamp(savedDims?.height ?? defaults.height, activeLevel.minimumHeight, activeLevel.maximumHeight))
     setCode(codeByLevel[activeLevel.id] ?? activeLevel.starterCode)
@@ -96,7 +122,7 @@ function App() {
     setMessage('Ready.')
     setErrorMessage(null)
     setStats(null)
-  }, [activeLevelId, activeLevel])
+  }, [activeLevelId, activeLevel, activeLevels])
 
   useEffect(() => {
     if (!activeLevelId) {
@@ -116,7 +142,9 @@ function App() {
   }, [activeLevel, width, height])
 
   const persist = () => {
+    //console.time('persist')
     const payload = {
+      currentWorld,
       activeLevelId,
       levelCode: codeByLevel,
       completedLevels: Array.from(completedLevels),
@@ -128,13 +156,12 @@ function App() {
       return
     }
     lastSavedRef.current = serialized
+    //console.timeLog('persist', 'stringified')
     saveState(payload)
+    //console.timeEnd('persist')
   }
 
   useEffect(() => {
-    if (!activeLevelId) {
-      return
-    }
     if (saveTimeoutRef.current !== null) {
       window.clearTimeout(saveTimeoutRef.current)
     }
@@ -160,7 +187,7 @@ function App() {
         window.cancelIdleCallback?.(idleCallbackRef.current)
       }
     }
-  }, [activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
+  }, [currentWorld, activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -172,7 +199,7 @@ function App() {
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
+  }, [currentWorld, activeLevelId, codeByLevel, completedLevels, unlockedLevels, dimensionsByLevel])
 
   const evaluateHiddenTests = async () => {
     if (!activeLevel) {
@@ -180,8 +207,11 @@ function App() {
     }
     for (const test of activeLevel.hiddenTestCases) {
       const expected = activeLevel.referenceGenerator(test.width, test.height)
+      // console.time('runProgram')
       const output = await runLevelCode(code, test.width, test.height)
+      // console.timeLog('runProgram', 'python done')
       const result = judgeBuffers(expected, output)
+      // console.timeEnd('runProgram')
       if (!result.match) {
         return false
       }
@@ -232,9 +262,9 @@ function App() {
           setCompletedLevels(nextCompleted)
 
           const nextUnlocked = new Set(unlockedLevels)
-          const currentIndex = world1Levels.findIndex((level) => level.id === activeLevel.id)
-          if (currentIndex >= 0 && currentIndex < world1Levels.length - 1) {
-            nextUnlocked.add(world1Levels[currentIndex + 1].id)
+          const currentIndex = activeLevels.findIndex((level) => level.id === activeLevel.id)
+          if (currentIndex >= 0 && currentIndex < activeLevels.length - 1) {
+            nextUnlocked.add(activeLevels[currentIndex + 1].id)
           }
           setUnlockedLevels(nextUnlocked)
 
@@ -336,14 +366,48 @@ function App() {
     setMessage('Reset to starter code.')
   }
 
+  const onWorldChange = (world: number) => {
+    if (world === currentWorld) {
+      return
+    }
+    const nextLevels = worlds[world - 1] ?? worlds[0]
+    runIdRef.current += 1
+    setCurrentWorld(world)
+    setActiveLevelId(nextLevels[0]?.id ?? '')
+    setUnlockedLevels((previous) => new Set([...previous, ...nextLevels.map((level) => level.id)]))
+    setOutputBuffer(null)
+    setStatus('idle')
+    setMessage('Ready.')
+    setErrorMessage(null)
+    setStats(null)
+  }
+
   if (!activeLevel) {
-    return <div className="app-shell">No levels available.</div>
+    return (
+      <div className="app-shell">
+        <header className="app-header">
+          <div>
+            <h1>GetSetPixel</h1>
+          </div>
+          <div className="header-meta">
+            <span>Pyodide + Monaco</span>
+          </div>
+        </header>
+        <main className="main-split">
+          <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} />
+          <div className="divider vertical worlds-list-divider" />
+          <section className="left-panel empty-world-panel">
+            <div className="panel">No levels available.</div>
+          </section>
+        </main>
+      </div>
+    )
   }
 
   const accuracyPercent = stats ? (stats.accuracy * 100).toFixed(1) : '0.0'
   const accuracy = Number(accuracyPercent);
 
-  const getAccuracyColor = (accuracy) => {
+  const getAccuracyColor = (accuracy: number) => {
     if (accuracy == 100) return "#50fa7b"; // bright green
     if (accuracy >= 98) return "#92c287"; // green
     if (accuracy >= 95) return "#b6b083"; // lime
@@ -354,6 +418,8 @@ function App() {
     return "#ff5555"; // dark red
   };
 
+  console.count("App render");
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -361,7 +427,7 @@ function App() {
           <h1>GetSetPixel</h1>
         </div>
         <LevelList
-          levels={world1Levels}
+          levels={activeLevels}
           activeId={activeLevelId}
           completed={completedLevels}
           unlocked={unlockedLevels}
@@ -379,6 +445,10 @@ function App() {
       {/* <p1 className="world-indicator">World 1: Pattern Generation</p1> */}
       
       <main className="main-split" ref={splitRef}>
+        <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} />
+
+        <div className="divider vertical worlds-list-divider" />
+
         <section className="left-panel" style={{ width: leftWidth ? `${leftWidth}px` : '50%' }}>
           <div className="panel left-panel-inner">
             <div className="section">
