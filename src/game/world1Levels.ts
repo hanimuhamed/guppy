@@ -307,8 +307,7 @@ export const world1Levels: LevelDefinition[] = [
     return
 `,
     referenceGenerator: (width, height) => {
-      const buffer = createBuffer(55, 55)
-      return buffer
+      const buffer = createBuffer(width, height)
       const cx = Math.floor(width / 2)
       const cy = Math.floor(height / 2)
       const outerRadius = Math.min(cx, cy)
