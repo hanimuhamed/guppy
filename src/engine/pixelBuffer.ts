@@ -71,6 +71,7 @@ export class PixelBuffer {
   readonly data: Uint8ClampedArray
 
   constructor(width: number, height: number, fill?: RgbaColor) {
+    console.count("PixelBuffer created")
     this.width = width
     this.height = height
     this.data = new Uint8ClampedArray(width * height * 4)

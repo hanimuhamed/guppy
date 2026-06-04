@@ -148,7 +148,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
 import gc
 len(globals())
 `))*/
-    console.count("worker run");
+    // console.count("worker run");
     await pyodide.runPythonAsync(code)
     const solve = pyodide.globals.get('solve')
     if (!solve) {

@@ -97,7 +97,7 @@ export const runLevelCode = async (code: string, width: number, height: number) 
   await initWorker()
   const id = nextId
   nextId += 1
-  console.count("runProgram");
+  // console.count("runProgram");
   const buffer = await new Promise<Uint8ClampedArray>((resolve, reject) => {
     const timeout = window.setTimeout(() => {
       pending.delete(id)
@@ -113,5 +113,6 @@ export const runLevelCode = async (code: string, width: number, height: number) 
   if (buffer.length) {
     output.data.set(buffer)
   }
+  // console.count("outputBuffer created")
   return output
 }

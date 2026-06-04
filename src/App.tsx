@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { MouseEvent as ReactMouseEvent } from 'react'
 import './App.css'
-import type { PixelBuffer } from './engine/pixelBuffer'
+import { PixelBuffer } from './engine/pixelBuffer'
 import { world1Levels } from './game/world1Levels'
 import { world2Levels } from './game/world2Levels'
 import { world3Levels } from './game/world3Levels'
@@ -99,14 +99,14 @@ function App() {
     () => activeLevels.find((level) => level.id === activeLevelId) ?? activeLevels[0],
     [activeLevelId, activeLevels],
   )
-
+  
   const referenceBuffer = useMemo(() => {
     if (!activeLevel) {
       return null
     }
+    /*// console.count("referenceBuffer created")*/
     return activeLevel.referenceGenerator(width, height)
   }, [activeLevel, width, height])
-
 
   useEffect(() => {
     if (!activeLevel) {
@@ -226,6 +226,7 @@ function App() {
     if (!autoRunEnabled && reason !== 'manual') {
       return
     }
+    // console.count("runProgram started")
     const runId = runIdRef.current + 1
     runIdRef.current = runId
     const isManual = reason === 'manual'
@@ -237,10 +238,12 @@ function App() {
 
     try {
       const output = await runLevelCode(code, width, height)
+      // console.count("worker completed")
       if (runId !== runIdRef.current) {
         return
       }
       const result = judgeBuffers(referenceBuffer, output)
+      // console.count("output committed")
       setOutputBuffer(output)
       setStats({
         mismatchCount: result.mismatchCount,
@@ -289,7 +292,7 @@ function App() {
       }
     }
   }
-
+  
   useEffect(() => {
     if (!activeLevel) {
       return
@@ -418,7 +421,7 @@ function App() {
     return "#ff5555"; // dark red
   };
 
-  console.count("App render");
+  // console.count("App render");
 
   return (
     <div className="app-shell">

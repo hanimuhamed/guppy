@@ -1,3 +1,4 @@
+// CanvasPanel.tsx
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PixelBuffer } from '../engine/pixelBuffer'
 import { renderBufferToCanvas } from '../engine/canvasRenderer'
@@ -51,6 +52,7 @@ const CanvasPanel = ({ title, buffer, embedded = false }: CanvasPanelProps) => {
 
     const node = shellRef.current
     const updateSize = () => {
+      // console.count("ResizeObserver")
       const rect = node.getBoundingClientRect()
       const nextWidth = Math.max(1, Math.floor(rect.width))
       const nextHeight = Math.max(1, Math.floor(rect.height))
@@ -89,6 +91,7 @@ const CanvasPanel = ({ title, buffer, embedded = false }: CanvasPanelProps) => {
   }, [buffer, shellSize.width, shellSize.height])
 
   const handlePointer = (event: React.MouseEvent<HTMLDivElement>) => {
+    // console.count("mousemove")
     if (!buffer || !renderRect || !shellRef.current) {
       setHoverInfo(null)
       return
