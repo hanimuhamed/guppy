@@ -11,8 +11,7 @@ export type RgbaColor = {
   a: number
 }
 
-const clamp8 = (value: number) =>
-  Math.min(255, Math.max(0, Math.round(value)))
+// const clamp8 = (value: number) => Math.min(255, Math.max(0, Math.round(value)))
 
 export class PixelBuffer {
   readonly width: number

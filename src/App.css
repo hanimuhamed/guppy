@@ -21,11 +21,13 @@
 .app-header h1 {
   margin: 0;
   font-size: 24px;
+  font-weight: 500;
 }
 
 .app-header h1:hover {
-  color: var(--accent);
-  cursor: pointer;
+  background-color: var(--accent);
+  cursor: grabbing;
+  font-weight: 600;
 }
 
 .app-header p {
@@ -35,7 +37,7 @@
 
 .header-meta {
   display: flex;
-  gap: 12px;
+  gap: 4px;
   color: var(--text-muted);
   font-size: 12px;
   align-items: center;
@@ -44,7 +46,7 @@
 .ghost-button {
   background: transparent;
   color: var(--text-muted);
-  border-radius: 2px;
+  border-radius: 0px;
   padding: 4px 10px;
   cursor: pointer;
   font-size: 12px;
@@ -58,7 +60,7 @@
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -87,7 +89,7 @@
   color: var(--text-muted);
   padding: 4px;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 0px;
   transition: color 0.15s, background 0.15s;
 }
 
@@ -118,7 +120,8 @@
 
 .level-row {
   display: flex;
-  gap: 6px;
+  
+  gap: 8px;
   flex-wrap: nowrap;
   overflow-x: auto;
   padding-top: 3px 3px 3px 3px;
@@ -127,8 +130,8 @@
 
 .level-pill {
   background: var(--panel);
-  border: none;
-  border-radius: 2px;
+  border: 1px solid var(--border);
+  border-radius: 0px;
   padding: 6px 18px;
   font-size: 12px;
   color: var(--text-muted);
@@ -143,22 +146,29 @@
 
 .level-pill.done {
   color: var(--success);
-  background: color-mix(in srgb, var(--success) 5%, var(--panel));
+  background-color: var(--surface);
 }
 
 .level-pill.active {
-  background: var(--panel-strong);
-  color: var(--text);
-}
 
-.level-pill.done.active {
-  color: color-mix(in srgb, var(--success) 5%, var(--text));
-  background: color-mix(in srgb, var(--success) 20%, var(--panel));
+  box-shadow: 0 0 0 2px var(--text-muted) inset;
 }
 
 .level-pill.locked {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.level-nav-button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 0px;
+}
+
+.level-nav-button:hover {
+  color: var(--text);
 }
 
 .worlds-list {
@@ -173,7 +183,7 @@
 .world-button {
   background: var(--panel);
   border: none;
-  border-radius: 2px;
+  border-radius: 0px;
   color: var(--text-muted);
   cursor: pointer;
   font-size: 14px;
@@ -211,7 +221,7 @@
   background:var(--border);
   width: fit-content;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 0px;
   font-size: 11px;
   letter-spacing: 0.08em;
 }
@@ -252,8 +262,8 @@
 }
 
 .canvas-shell {
-  background: color-mix(in srgb, var(--bg) 75%, rgb(0, 0, 0));
-  border-radius: 2px;
+  background: color-mix(in srgb, var(--bg) 100%, rgb(0, 0, 0));
+  border-radius: 0px;
   border: none;
   width: 100%;
   height: 220px;
@@ -271,17 +281,7 @@
 }
 
 .canvas-render--hover {
-  cursor: pointer;
-}
-
-.canvas-highlight {
-  position: absolute;
-  background: rgba(117, 122, 131, 0.5);
-  pointer-events: none;
-}
-
-.canvas-highlight:hover {
-  cursor: pointer;
+  cursor: crosshair;
 }
 
 .canvas-hover {
@@ -292,7 +292,7 @@
   gap: 8px;
   padding: 6px 8px;
   background: rgba(16, 16, 18, 0.92);
-  border-radius: 2px;
+  border-radius: 0px;
   font-size: 11px;
   color: var(--text);
   pointer-events: none;
@@ -319,7 +319,7 @@
   background: var(--surface);
   color: var(--text);
   border: none;
-  border-radius: 2px;
+  border-radius: 0px;
   padding: 6px 12px;
   cursor: pointer;
   font-size: 14px;
@@ -339,7 +339,7 @@
 .pill {
   font-size: 11px;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: 0px;
   background: rgba(124, 131, 255, 0.2);
   color: var(--accent);
 }
@@ -445,7 +445,7 @@
 .dimension-controls {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
 }
 
 .dimension-row {
@@ -455,12 +455,13 @@
   align-items: center;
 }
 
+/*
 .dimension-controls .slider-row {
   display: grid;
   grid-template-columns: 56px 1fr;
   align-items: center;
   gap: 8px;
-}
+}*/
 
 .dimension-controls label {
   font-size: 12px;
@@ -472,7 +473,7 @@
 
 .slider-value {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   min-width: 20px;
@@ -504,7 +505,7 @@
   align-items: center;
   gap: 4px;
   padding: 8px 10px;
-  border-radius: 2px;
+  border-radius: 0px;
   min-width: 60px;
   flex: 1;
   background: var(--surface);
@@ -543,7 +544,7 @@
   border-left: 2px solid transparent;
   padding: 6px 8px;
   font-size: 12px;
-  border-radius: 2px;
+  border-radius: 0px;
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -643,4 +644,44 @@
   .canvas-pair {
     grid-template-columns: 1fr;
   }
+}
+
+#height-slider {
+  appearance: none;
+  background: var(--surface); /* important */
+}
+
+#height-slider::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  border: none;
+}
+
+#height-slider::-moz-range-progress {
+  width: 12px;
+  height: 12px;
+  background: var(--text);
+  border: none;
+  border-radius: 0;
+  cursor: -moz-grab;
+}
+
+#width-slider {
+  appearance: none;
+  background: var(--surface); /* important */
+}
+
+#width-slider::-moz-range-thumb {
+  width: 0;
+  height: 0;
+  border: none;
+}
+
+#width-slider::-moz-range-progress {
+  width: 12px;
+  height: 12px;
+  background: var(--text);
+  border: none;
+  border-radius: 0;
+  cursor: -moz-grab;
 }

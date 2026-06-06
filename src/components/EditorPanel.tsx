@@ -1,12 +1,12 @@
 import { Suspense, lazy } from 'react'
 import type * as monaco from 'monaco-editor'
-//import nordTheme from '../themes/Nord.json'
-import draculaTheme from '../themes/Dracula.json'
+// import nordTheme from '../themes/Nord.json'
+// import draculaTheme from '../themes/Dracula.json'
+import bixTheme from '../themes/Bix.json'
 
 const MonacoEditor = lazy(() => import('@monaco-editor/react'))
 
-//let nordThemeLoaded = false
-let draculaThemeLoaded = false
+let themeLoaded = false
 
 type EditorPanelProps = {
   code: string
@@ -46,7 +46,7 @@ const EditorPanel = ({
     <div className="panel editor-panel">
       <div className="panel-header">
         <span>Editor</span>
-        <div className="panel-actions">
+        <div className="panel-actions">   
           {isRunning ? <span className="pill">Running...</span> : null}
           <button
             type="button"
@@ -93,26 +93,28 @@ const EditorPanel = ({
           </button>
         </div>
       </div>
+      <hr/>
       <div className="editor-body">
         {/* !editorReady ? fallback : null */}
         <Suspense fallback={null}>
           <MonacoEditor
             height="100%"
             defaultLanguage="python"
-            theme="dracula"
+            theme="bix"
             path={`${modelPath}.py`}
             value={code}
             onChange={(value) => onChange(value ?? '')}
             beforeMount={(monacoInstance: typeof monaco) => {
-              if (draculaThemeLoaded) {
+              if (themeLoaded) {
                 return
               }
-              monacoInstance.editor.defineTheme('dracula', draculaTheme as monaco.editor.IStandaloneThemeData)
-              draculaThemeLoaded = true
+              monacoInstance.editor.defineTheme('bix', bixTheme as monaco.editor.IStandaloneThemeData)
+              themeLoaded = true
             }}
             //onMount={() => setEditorReady(true)}
             options={{
-              fontSize: 14,
+              fontSize: 16,
+              fontFamily: "Space Mono",
               minimap: { enabled: false },
               scrollbar: { vertical: 'auto', horizontal: 'auto' },
             }}

@@ -9,7 +9,7 @@ type CanvasPanelProps = {
   embedded?: boolean
 }
 
-const CANVAS_PADDING = 12
+const CANVAS_PADDING = 0
 
 type HoverInfo = {
   x: number
@@ -155,6 +155,7 @@ const CanvasPanel = ({ title, buffer, embedded = false }: CanvasPanelProps) => {
     }
   }, [])
 
+  /*
   const highlightStyle = useMemo(() => {
     if (!hoverInfo || !renderRect) {
       return null
@@ -168,6 +169,7 @@ const CanvasPanel = ({ title, buffer, embedded = false }: CanvasPanelProps) => {
       height: size,
     }
   }, [hoverInfo, renderRect])
+  */
 
   const content = (
     <>
@@ -181,7 +183,6 @@ const CanvasPanel = ({ title, buffer, embedded = false }: CanvasPanelProps) => {
           onClick={handleClick}
         >
           <canvas ref={canvasRef} className="canvas-render" />
-          {highlightStyle ? <div className="canvas-highlight" style={highlightStyle} /> : null}
           {!buffer ? <div className="canvas-empty">Waiting for output...</div> : null}
         </div>
         {hoverInfo ? (

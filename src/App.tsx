@@ -390,7 +390,7 @@ function App() {
       <div className="app-shell">
         <header className="app-header">
           <div>
-            <h1>GetSetPixel</h1>
+            <h1>getsetpixel</h1>
           </div>
           <div className="header-meta">
             <span>Pyodide + Monaco</span>
@@ -427,7 +427,7 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <div>
-          <h1>GetSetPixel</h1>
+          <h1>getsetpixel</h1>
         </div>
         <LevelList
           levels={activeLevels}
@@ -442,7 +442,9 @@ function App() {
           }}
         />
         <div className="header-meta">
-          <span>Pyodide + Monaco</span>
+          <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">Pyodide</a>
+          <span> + </span>
+          <a href="https://microsoft.github.io/monaco-editor/" target="_blank" rel="noopener noreferrer">Monaco</a>
         </div>
       </header>
       {/* <p1 className="world-indicator">World 1: Pattern Generation</p1> */}
@@ -459,15 +461,16 @@ function App() {
               <div className={`difficulty-pill difficulty-pill--${activeLevel.difficulty.toLowerCase()}`}>
                 {activeLevel.difficulty}
               </div>
+              <hr/>
               <div className="section-title"><span>Description</span></div>
               <p>{activeLevel.description}</p>
             </div>
-
+            <hr/>
             <div className="section">
               <CanvasPanel title="Reference" buffer={referenceBuffer} embedded />
               <CanvasPanel title="Output" buffer={outputBuffer} embedded />
             </div>
-
+            <hr/>
             <DimensionControls
               width={width}
               height={height}
@@ -478,7 +481,7 @@ function App() {
               onWidthChange={(value) => setWidth(clamp(value, activeLevel.minimumWidth, activeLevel.maximumWidth))}
               onHeightChange={(value) => setHeight(clamp(value, activeLevel.minimumHeight, activeLevel.maximumHeight))}
             />
-
+            <hr/>
             <div className="section">
               <div className="section-title">Accuracy</div>
               <div className="accuracy-row">
@@ -501,6 +504,7 @@ function App() {
                 </div>
               </div>
             </div>
+            <hr/>
           </div>
         </section>
 
