@@ -7,6 +7,7 @@ export type SaveState = {
   completedLevels: string[]
   unlockedLevels: string[]
   levelDimensions: Record<string, { width: number; height: number }>
+  codeFontSize: number
 }
 
 const defaultState: SaveState = {
@@ -16,6 +17,7 @@ const defaultState: SaveState = {
   completedLevels: [],
   unlockedLevels: [],
   levelDimensions: {},
+  codeFontSize: 14,
 }
 
 export const loadSaveState = (): SaveState => {
@@ -34,6 +36,9 @@ export const loadSaveState = (): SaveState => {
       completedLevels: parsed.completedLevels ?? [],
       unlockedLevels: parsed.unlockedLevels ?? [],
       levelDimensions: parsed.levelDimensions ?? {},
+      codeFontSize: Number.isInteger(parsed.codeFontSize) && parsed.codeFontSize >= 12 && parsed.codeFontSize <= 24
+        ? parsed.codeFontSize
+        : 16, 
     }
   } catch {
     return defaultState

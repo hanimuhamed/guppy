@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import type * as monaco from 'monaco-editor'
 // import nordTheme from '../themes/Nord.json'
 // import draculaTheme from '../themes/Dracula.json'
@@ -18,6 +18,7 @@ type EditorPanelProps = {
   errorMessage: string | null
   onReset: () => void
   onRun: () => void
+  fontSize: number
 }
 
 const EditorPanel = ({
@@ -30,17 +31,8 @@ const EditorPanel = ({
   errorMessage,
   onReset,
   onRun,
+  fontSize,
 }: EditorPanelProps) => {
-  //const [editorReady, setEditorReady] = useState(false)
-
-  /*const fallback = (
-    <textarea
-      className="editor-fallback"
-      value={code}
-      onChange={(event) => onChange(event.target.value)}
-      spellCheck={false}
-    />
-  )*/
 
   return (
     <div className="panel editor-panel">
@@ -60,9 +52,10 @@ const EditorPanel = ({
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <polygon
                 points="5,3 21,12 5,21"
-                fill="white"
+                fill="currentColor"
               />
             </svg>
+            <span>RUN</span>
           </button>
           <button
             type="button"
@@ -113,14 +106,17 @@ const EditorPanel = ({
             }}
             //onMount={() => setEditorReady(true)}
             options={{
-              fontSize: 16,
+              fontSize: fontSize,
               fontFamily: "Space Mono",
-              minimap: { enabled: false },
-              scrollbar: { vertical: 'auto', horizontal: 'auto' },
+              minimap: { enabled: true },
+              scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
+              wordWrap: 'on',
+              mouseWheelZoom: true,
             }}
           />
         </Suspense>
       </div>
+      
       {status !== 'idle' || errorMessage ? (
         <div className={`editor-status editor-status--${status}`}>
           <div>{errorMessage ?? message}</div>

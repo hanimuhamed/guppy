@@ -20,12 +20,30 @@ export const world1Levels: LevelDefinition[] = [
     id: 'w1-center-dot',
     index: 1,
     title: 'Dot',
-    description: 'Place a single yellow pixel at the exact center of the canvas. Use setPixel(x, y, \'#RRGGBB\') to set the pixel color at position (x, y). Try clicking a pixel on the reference image to see its coordinates and copy the color code.',
+    description: (
+      <>
+        <p>
+          Place a single <strong>yellow pixel</strong> at the exact center of the
+          canvas.
+        </p>
+
+        <p>
+          Use <code>setPixel<span style={{color: '#ffd700'}}>(</span>x, y, <span style={{color: '#f1fa8c'}}>'#RRGGBB'</span><span style={{color: '#ffd700'}}>)</span></code> to set the pixel color at
+          position <code><span style={{color: '#ffd700'}}>(</span>x, y<span style={{color: '#ffd700'}}>)</span></code>.
+        </p>
+
+        <p>
+          Try clicking a pixel on the reference image to see its coordinates and
+          copy the color code.
+        </p>
+      </>
+    ),
     difficulty: 'Easy',
     minimumWidth: 3,
     maximumWidth: 15,
     minimumHeight: 3,
     maximumHeight: 15,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -50,6 +68,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 25,
     minimumHeight: 3,
     maximumHeight: 25,
+    dimensionStep: 1,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -81,6 +100,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 25,
     minimumHeight: 5,
     maximumHeight: 25,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -112,6 +132,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 24,
     minimumHeight: 4,
     maximumHeight: 24,
+    dimensionStep: 1, 
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -142,6 +163,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 25,
     minimumHeight: 5,
     maximumHeight: 25,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -169,9 +191,10 @@ export const world1Levels: LevelDefinition[] = [
     description: 'Fill a diamond shape centered in the canvas.',
     difficulty: 'Medium',
     minimumWidth: 7,
-    maximumWidth: 41,
+    maximumWidth: 43,
     minimumHeight: 7,
-    maximumHeight: 41,
+    maximumHeight: 43,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -206,6 +229,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 45,
     minimumHeight: 5,
     maximumHeight: 45,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -235,6 +259,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 45,
     minimumHeight: 9,
     maximumHeight: 45,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -270,6 +295,7 @@ export const world1Levels: LevelDefinition[] = [
     maximumWidth: 55,
     minimumHeight: 11,
     maximumHeight: 55,
+    dimensionStep: 1,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return
@@ -297,11 +323,12 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Citrus',
     description:
       'Draw an orange slice: an orange outer circle, a light orange inner circle, and white cross + diagonal dividers.',
-    difficulty: 'Hard',
+    difficulty: 'Extreme',
     minimumWidth: 17,
-    maximumWidth: 55,
+    maximumWidth: 57,
     minimumHeight: 17,
-    maximumHeight: 55,
+    maximumHeight: 57,
+    dimensionStep: 2,
     starterCode: `def solve(width: int, height: int) -> None:
     # Your code goes here.
     return

@@ -1,4 +1,4 @@
-import { PixelBuffer } from '../engine/pixelBuffer'
+/*mport { PixelBuffer } from '../engine/pixelBuffer'
 import type { LevelDefinition } from './types'
 
 const black = { r: 0, g: 0, b: 0, a: 255 }
@@ -315,4 +315,4 @@ export const world1Levels: LevelDefinition[] = [
       { width: 37, height: 29 },
     ],
   },
-]
+]*/

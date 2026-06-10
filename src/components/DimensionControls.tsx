@@ -5,6 +5,7 @@ type DimensionControlsProps = {
   maxWidth: number
   minHeight: number
   maxHeight: number
+  step: number
   onWidthChange: (value: number) => void
   onHeightChange: (value: number) => void
 }
@@ -16,6 +17,7 @@ const DimensionControls = ({
   maxWidth,
   minHeight,
   maxHeight,
+  step,
   onWidthChange,
   onHeightChange,
 }: DimensionControlsProps) => {
@@ -31,7 +33,7 @@ const DimensionControls = ({
             type="range"
             min={minWidth}
             max={maxWidth}
-            step={2}
+            step={step}
             value={width}
             onChange={(event) => onWidthChange(Number(event.target.value))}
           />
@@ -43,7 +45,7 @@ const DimensionControls = ({
             type="range"
             min={minHeight}
             max={maxHeight}
-            step={2}
+            step={step}
             value={height}
             onChange={(event) => onHeightChange(Number(event.target.value))}
           />

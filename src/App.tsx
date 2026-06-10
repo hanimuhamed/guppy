@@ -77,6 +77,7 @@ function App() {
   const [status, setStatus] = useState<'idle' | 'running' | 'passed' | 'failed' | 'error'>('idle')
   const [message, setMessage] = useState('Ready.')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [codeFontSize, setCodeFontSize] = useState(14)
   const [stats, setStats] = useState<{
     mismatchCount: number
     totalPixels: number
@@ -94,6 +95,11 @@ function App() {
   const saveTimeoutRef = useRef<number | null>(null)
   const idleCallbackRef = useRef<number | null>(null)
   const splitRef = useRef<HTMLDivElement | null>(null)
+
+  const appName = 'guppy'
+  const appLogo = (
+    <h1><span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}</h1>
+  )
 
   const activeLevel = useMemo(
     () => activeLevels.find((level) => level.id === activeLevelId) ?? activeLevels[0],
@@ -150,6 +156,7 @@ function App() {
       completedLevels: Array.from(completedLevels),
       unlockedLevels: Array.from(unlockedLevels),
       levelDimensions: dimensionsByLevel,
+      codeFontSize,
     }
     const serialized = JSON.stringify(payload)
     if (serialized === lastSavedRef.current) {
@@ -217,6 +224,10 @@ function App() {
       }
     }
     return true
+  }
+
+  const updateFontSize = (delta: number) => {
+    setCodeFontSize((size) => clamp(size + delta, 10, 24))
   }
 
   const runProgram = async (reason: 'manual' | 'auto' | 'dimension') => {
@@ -330,7 +341,7 @@ function App() {
     }
     const width = splitRef.current.clientWidth
     if (width > 0) {
-      setLeftWidth(Math.floor(width / 3))
+      setLeftWidth(Math.floor(width * 0.275))
     }
   }, [leftWidth])
 
@@ -366,6 +377,8 @@ function App() {
       return
     }
     setCode(activeLevel.starterCode)
+    setStatus('idle')
+    setErrorMessage(null)
     setMessage('Reset to starter code.')
   }
 
@@ -384,16 +397,19 @@ function App() {
     setErrorMessage(null)
     setStats(null)
   }
+  
 
   if (!activeLevel) {
     return (
       <div className="app-shell">
         <header className="app-header">
           <div>
-            <h1>getsetpixel</h1>
+            {appLogo}
           </div>
           <div className="header-meta">
-            <span>Pyodide + Monaco</span>
+            <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">Pyodide</a>
+            <span> + </span>
+            <a href="https://microsoft.github.io/monaco-editor/" target="_blank" rel="noopener noreferrer">Monaco</a>
           </div>
         </header>
         <main className="main-split">
@@ -411,15 +427,19 @@ function App() {
   const accuracy = Number(accuracyPercent);
 
   const getAccuracyColor = (accuracy: number) => {
-    if (accuracy == 100) return "#50fa7b"; // bright green
-    if (accuracy >= 98) return "#92c287"; // green
-    if (accuracy >= 95) return "#b6b083"; // lime
-    if (accuracy >= 90) return "#c4a682"; // yellow
-    if (accuracy >= 80) return "#d19c80"; // amber
-    if (accuracy >= 60) return "#dd907e"; // orange
-    if (accuracy >= 30) return "#e8847c"; // red
-    return "#ff5555"; // dark red
+    if (accuracy == 100) return "#bced09";
+    if (accuracy >= 98) return "#e4f70a";
+    if (accuracy >= 95) return "#f8ec14";
+    if (accuracy >= 90) return "#f9d01e";
+    if (accuracy >= 80) return "#fbb628";
+    if (accuracy >= 70) return "#fc9f32"; 
+    if (accuracy >= 60) return "#fd8a3d"; 
+    if (accuracy >= 40) return "#fd7847";   
+    if (accuracy >= 20) return "#fe6951"; 
+    return "#ff5c5c"; 
   };
+
+  
 
   // console.count("App render");
 
@@ -427,7 +447,7 @@ function App() {
     <div className="app-shell">
       <header className="app-header">
         <div>
-          <h1>getsetpixel</h1>
+          {appLogo}
         </div>
         <LevelList
           levels={activeLevels}
@@ -463,7 +483,7 @@ function App() {
               </div>
               <hr/>
               <div className="section-title"><span>Description</span></div>
-              <p>{activeLevel.description}</p>
+              <div>{activeLevel.description}</div>
             </div>
             <hr/>
             <div className="section">
@@ -478,6 +498,7 @@ function App() {
               maxWidth={activeLevel.maximumWidth}
               minHeight={activeLevel.minimumHeight}
               maxHeight={activeLevel.maximumHeight}
+              step={activeLevel.dimensionStep}
               onWidthChange={(value) => setWidth(clamp(value, activeLevel.minimumWidth, activeLevel.maximumWidth))}
               onHeightChange={(value) => setHeight(clamp(value, activeLevel.minimumHeight, activeLevel.maximumHeight))}
             />
@@ -521,6 +542,7 @@ function App() {
             errorMessage={errorMessage}
             onReset={onReset}
             onRun={() => runProgram('manual')}
+            fontSize={codeFontSize}
           />
         </section>
       </main>
