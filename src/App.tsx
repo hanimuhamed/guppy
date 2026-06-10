@@ -21,6 +21,7 @@ import DimensionControls from './components/DimensionControls'
 import EditorPanel from './components/EditorPanel'
 import LevelList from './components/LevelList'
 import WorldsList from './components/WorldsList'
+import HintItem from './components/HintItem'
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 
@@ -87,6 +88,7 @@ function App() {
   const [completedLevels, setCompletedLevels] = useState(new Set(saved.completedLevels))
   const [unlockedLevels, setUnlockedLevels] = useState(new Set(activeLevels.map((level) => level.id)))
   const [leftWidth, setLeftWidth] = useState<number | null>(null)
+  const [worldsListWidth, setWorldsListWidth] = useState<number | null>(null)
   const [autoRunEnabled, setAutoRunEnabled] = useState(false)
 
   const runIdRef = useRef(0)
@@ -339,9 +341,9 @@ function App() {
     if (!splitRef.current || leftWidth !== null) {
       return
     }
-    const width = splitRef.current.clientWidth
-    if (width > 0) {
-      setLeftWidth(Math.floor(width * 0.275))
+    const totalWidth = splitRef.current.clientWidth
+    if (totalWidth > 0) {
+      setLeftWidth(Math.floor(totalWidth * 0.275))
     }
   }, [leftWidth])
 
@@ -361,6 +363,26 @@ function App() {
     const onMove = (moveEvent: MouseEvent) => {
       const nextLeft = clamp(startLeft + (moveEvent.clientX - startX), 320, splitWidth - 320)
       setLeftWidth(nextLeft)
+    }
+
+    const onStop = () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onStop)
+    }
+
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onStop)
+  }
+
+  const startResizeWorldsList = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    const startX = event.clientX
+    const startWorldsWidth = worldsListWidth ?? 60
+
+    const onMove = (moveEvent: MouseEvent) => {
+      const delta = moveEvent.clientX - startX
+      const nextWorldsWidth = clamp(startWorldsWidth + delta, 40, 200)
+      setWorldsListWidth(nextWorldsWidth)
     }
 
     const onStop = () => {
@@ -413,8 +435,8 @@ function App() {
           </div>
         </header>
         <main className="main-split">
-          <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} />
-          <div className="divider vertical worlds-list-divider" />
+          <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} style={worldsListWidth ? { width: `${worldsListWidth}px`, flexShrink: 0 } : undefined} />
+          <div className="divider vertical worlds-list-divider" onMouseDown={startResizeWorldsList} />
           <section className="left-panel empty-world-panel">
             <div className="panel">No levels available.</div>
           </section>
@@ -470,9 +492,9 @@ function App() {
       {/* <p1 className="world-indicator">World 1: Pattern Generation</p1> */}
       
       <main className="main-split" ref={splitRef}>
-        <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} />
+        <WorldsList currentWorld={currentWorld} onWorldChange={onWorldChange} style={worldsListWidth ? { width: `${worldsListWidth}px`, flexShrink: 0 } : undefined} />
 
-        <div className="divider vertical worlds-list-divider" />
+        <div className="divider vertical worlds-list-divider" onMouseDown={startResizeWorldsList} />
 
         <section className="left-panel" style={{ width: leftWidth ? `${leftWidth}px` : '50%' }}>
           <div className="panel left-panel-inner">
@@ -526,11 +548,20 @@ function App() {
               </div>
             </div>
             <hr/>
+            {activeLevel.hints && activeLevel.hints.length > 0 && (
+              <div className="section">
+                <div className="section-title">Hints</div>
+                <div className="hints">
+                  {activeLevel.hints.map((hint) => (
+                    <HintItem key={hint.id} hint={hint} />
+                  ))}
+                </div>
+              <hr/>
+              </div>    
+            )}  
           </div>
         </section>
-
         <div className="divider vertical" onMouseDown={startResize} />
-
         <section className="right-panel">
           <EditorPanel
             code={code}

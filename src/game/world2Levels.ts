@@ -18,6 +18,12 @@ export const world2Levels: LevelDefinition[] = [
     title: 'Germany',
     description: 'Draw the German flag: three equal horizontal stripes — black on top, red in the middle, yellow on the bottom.',
     difficulty: 'Easy',
+    hints: [
+      {
+        id: 1,
+        description: 'Each stripe should be one-third of the total height.'
+      },
+    ],
     minimumWidth: 6,
     maximumWidth: 30,
     minimumHeight: 6,
@@ -268,7 +274,7 @@ export const world2Levels: LevelDefinition[] = [
     id: 'w2-flag-india',
     index: 8,
     title: 'India',
-    description: 'Draw the Indian flag: three equal horizontal stripes — saffron, white, green. In the center of the white stripe, draw the Ashoka Chakra: a navy blue circle outline with 8 evenly spaced spokes radiating from its center.',
+    description: 'Draw the Indian flag: three equal horizontal stripes — saffron, white, green. In the center of the white stripe, draw the Ashoka Chakra: a navy blue circle outline with 8 (actually 24 but 8 for simplicity) evenly spaced spokes radiating from its center.',
     difficulty: 'Hard',
     minimumWidth: 15,
     maximumWidth: 75,

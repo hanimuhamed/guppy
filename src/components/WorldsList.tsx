@@ -1,15 +1,19 @@
 type WorldsListProps = {
   currentWorld: number
   onWorldChange: (world: number) => void
+  style?: React.CSSProperties
 }
 
-const WORLD_COUNT = 10
-
-const WorldsList = ({ currentWorld, onWorldChange }: WorldsListProps) => {
+const WORLD_NAMES = [
+  'Basics',
+  'Flags',
+  '???',
+]
+const WorldsList = ({ currentWorld, onWorldChange, style }: WorldsListProps) => {
   return (
-    <aside className="worlds-list panel" aria-label="Worlds">
+    <aside className="worlds-list panel" aria-label="Worlds" style={style}>
       <hr/>
-      {Array.from({ length: WORLD_COUNT }, (_, index) => {
+      {Array.from({ length: WORLD_NAMES.length }, (_, index) => {
         const world = index + 1
         return (
           <button
@@ -18,7 +22,7 @@ const WorldsList = ({ currentWorld, onWorldChange }: WorldsListProps) => {
             className={`world-button${currentWorld === world ? ' active' : ''}`}
             onClick={() => onWorldChange(world)}
           >
-            World {world}
+            {WORLD_NAMES[world - 1] || `???`}
           </button>
         )
       })}
@@ -26,5 +30,4 @@ const WorldsList = ({ currentWorld, onWorldChange }: WorldsListProps) => {
     </aside>
   )
 }
-
 export default WorldsList

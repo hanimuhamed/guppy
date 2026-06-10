@@ -6,12 +6,18 @@ export type LevelTestCase = {
   height: number
 }
 
+export type Hint = {
+  id: number
+  description: React.ReactNode
+}
+
 export type LevelDefinition = {
   id: string
   index: number
   title: string
   description: React.ReactNode
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'Extreme'
+  hints?: Hint[]
   minimumWidth: number
   maximumWidth: number
   minimumHeight: number

@@ -172,12 +172,17 @@
 }
 
 .worlds-list {
-  flex: 0 0 112px;
+  flex: 0 0 auto;
+  width: 112px; /* default width, overridden by inline style when dragging */
   height: 100%;
+  min-width: 96px;
   min-height: 0;
   gap: 6px;
   padding: 8px;
   overflow-y: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .world-button {
@@ -419,16 +424,12 @@
 
 .divider.vertical {
   width: 8px;
-  cursor: col-resize;
-}
-
-.divider.vertical.worlds-list-divider {
-  cursor: default;
+  cursor: ew-resize;
 }
 
 .divider.horizontal {
   height: 8px;
-  cursor: row-resize;
+  cursor: ns-resize;
 }
 
 .divider.vertical::after,
@@ -441,10 +442,6 @@
 .divider.vertical:hover::after,
 .divider.horizontal:hover::after {
   background: rgba(223, 227, 255, 0.12);
-}
-
-.divider.vertical.worlds-list-divider:hover::after {
-  background: transparent;
 }
 
 .dimension-controls {
@@ -682,24 +679,24 @@
   }
 }
 
-#height-slider {
+#slider {
   appearance: none;
   background: var(--surface); /* important */
   cursor: grab;
   height: 4px;
 }
 
-#height-slider:active {
+#slider:active {
   cursor: grabbing;
 }
 
-#height-slider::-moz-range-thumb {
+#slider::-moz-range-thumb {
   width: 0;
   height: 0;
   border: none;
 }
 
-#height-slider::-moz-range-progress {
+#slider::-moz-range-progress {
   width: 8px;
   height: 8px;
   background: var(--accent);
@@ -707,39 +704,8 @@
   border-radius: 0;
 }
 
-#height-slider::-moz-range-progress:hover,
-#height-slider::-moz-range-progress:active {
-  background: var(--text);
-}
-
-
-#width-slider {
-  appearance: none;
-  background: var(--surface); /* important */
-  cursor: grab;
-  height: 4px;
-}
-
-#width-slider:active {
-  cursor: grabbing;
-}
-
-#width-slider::-moz-range-thumb {
-  width: 0;
-  height: 0;
-  border: none;
-}
-
-#width-slider::-moz-range-progress {
-  width: 8px;
-  height: 8px;
-  background: var(--accent);
-  border: none;
-  border-radius: 0;
-}
-
-#width-slider::-moz-range-progress:hover,
-#width-slider::-moz-range-progress:active {
+#slider::-moz-range-progress:hover,
+#slider::-moz-range-progress:active {
   background: var(--text);
 }
 
@@ -761,4 +727,53 @@ code {
 
 .color-accent {
   color: var(--accent);
+}
+
+.hints {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hint {
+  border: 0px solid var(--border);
+  overflow: hidden;
+}
+
+.hint-header {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 12px;
+  cursor: pointer;
+  color: var(--text-muted);
+  box-sizing: border-box;
+  background: var(--surface);
+  user-select: none;
+}
+
+.hint-header:hover {
+  color: var(--text);
+}
+
+.hint--open .hint-header {
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
+}
+
+.hint-chevron {
+  font-size: 1em;
+  transition: transform 0.05s;
+}
+
+.hint-chevron--up {
+  transform: rotate(180deg);
+}
+
+.hint-body {
+  padding: 10px 12px;
+  color: var(--text-muted);
+  border: 2px solid var(--border);
 }

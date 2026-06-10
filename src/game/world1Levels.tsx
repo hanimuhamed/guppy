@@ -39,6 +39,28 @@ export const world1Levels: LevelDefinition[] = [
       </>
     ),
     difficulty: 'Easy',
+    hints: [
+      {
+        id: 1,
+        description: 'Calculate the center coordinates using width and height.',
+      },
+      {
+        id: 2,
+        description: 'Use floor division (//) to get the integer coordinates of the center.',
+      },
+      {
+        id: 3,
+        description: 'As mentioned in the description, click on the yellow pixel in the reference image to get its color code.',
+      },
+      {
+        id: 4,
+        description: 'The center pixel is at (width // 2, height // 2).',
+      },
+      {
+        id: 5,
+        description: 'Use setPixel(width//2, height//2, \'#ffd700\')',
+      }
+    ],
     minimumWidth: 3,
     maximumWidth: 15,
     minimumHeight: 3,
@@ -64,6 +86,16 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Border',
     description: 'Draw a 1-pixel green border around the entire canvas edge.',
     difficulty: 'Easy',
+    hints: [
+      {
+        id: 1,
+        description: 'Use for loops to iterate over the x and y coordinates along the edges of the canvas.',
+      },
+      {
+        id: 2,
+        description: <p><a href="https://www.geeksforgeeks.org/python/python-for-loops/" target="_blank" rel="noopener noreferrer" style={{color: '#f7fff7', textDecoration: 'underline'}}>Here</a> is a refresher on for loops in Python if you need it.</p>,
+      },
+    ],
     minimumWidth: 3,
     maximumWidth: 25,
     minimumHeight: 3,
@@ -96,6 +128,16 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Cross',
     description: 'Draw a red plus-shaped cross with lines running through the center of the canvas.',
     difficulty: 'Easy',
+    hints: [
+      {
+        id: 1,
+        description: 'The vertical line of the cross consists of pixels where x is equal to the center x coordinate.',
+      },
+      {
+        id: 2,
+        description: 'The horizontal line of the cross consists of pixels where y is equal to the center y coordinate.',
+      },
+    ],
     minimumWidth: 5,
     maximumWidth: 25,
     minimumHeight: 5,
@@ -128,6 +170,12 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Checkerboard',
     description: 'Fill the canvas with alternating black and white cells.',
     difficulty: 'Easy',
+    hints: [
+      {
+        id: 1,
+        description: 'If x + y is even, color the cell black; if odd, color it white.',
+      },
+    ],
     minimumWidth: 4,
     maximumWidth: 24,
     minimumHeight: 4,
@@ -159,6 +207,16 @@ export const world1Levels: LevelDefinition[] = [
     title: 'X',
     description: 'Draw both diagonals of the canvas in green to form an X.',
     difficulty: 'Medium',
+    hints: [
+      {
+        id: 1,
+        description: 'The first diagonal consists of pixels where x = y.',
+      },
+      {
+        id: 2,
+        description: 'The second diagonal consists of pixels where x = width - y - 1.',
+      },
+    ],
     minimumWidth: 5,
     maximumWidth: 25,
     minimumHeight: 5,
@@ -190,6 +248,20 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Diamond',
     description: 'Fill a diamond shape centered in the canvas.',
     difficulty: 'Medium',
+    hints: [
+      {
+        id: 1,
+        description: 'For each pixel, calculate the Manhattan distance from the center: dist = abs(x - cx) + abs(y - cy).',
+      },
+      {
+        id: 2,
+        description: 'Fill the pixels where the distance is less than or equal to the radius.',
+      },
+      {
+        id: 3,
+        description: 'Radius is the minimum of cx and cy',
+      }
+    ],
     minimumWidth: 7,
     maximumWidth: 43,
     minimumHeight: 7,
@@ -225,6 +297,16 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Rectangles',
     description: 'Draw nested rectangular rings alternating between purple and yellow.',
     difficulty: 'Medium',
+    hints: [
+      {
+        id: 1,
+        description: 'The number of rings is determined by how many times you can inset a rectangle before reaching the center.',
+      },
+      {
+        id: 2,
+        description: 'Use a loop to draw each ring, calculating the coordinates and color of the current rectangle based on the ring index.',
+      },
+    ],
     minimumWidth: 5,
     maximumWidth: 45,
     minimumHeight: 5,
@@ -255,6 +337,16 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Ball',
     description: 'Fill a circle centered in the canvas.',
     difficulty: 'Hard',
+    hints: [
+      {
+        id: 1,
+        description: 'For each pixel, calculate the Euclidean distance from the center: dist = sqrt((x - cx)^2 + (y - cy)^2).',
+      },
+      {
+        id: 2,
+        description: 'Fill the pixels where the distance is less than the radius + 1.',
+      }
+    ],
     minimumWidth: 9,
     maximumWidth: 45,
     minimumHeight: 9,
@@ -273,7 +365,8 @@ export const world1Levels: LevelDefinition[] = [
         for (let x = 0; x < width; x += 1) {
           const dx = x - cx
           const dy = y - cy
-          if (Math.sqrt(dx * dx + dy * dy) < radius + 1) {
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < radius + 1) {
             buffer.setPixel(x, y, blue)
           }
         }
@@ -291,6 +384,20 @@ export const world1Levels: LevelDefinition[] = [
     title: 'Grid',
     description: 'Draw evenly spaced grey grid lines on a white background. Spacing scales with canvas size.',
     difficulty: 'Hard',
+    hints: [
+      {
+        id: 1,
+        description: 'Calculate the spacing based on the canvas size.',
+      },
+      {
+        id: 2,
+        description: 'Use modulo operator to determine which pixels should be colored grey.',
+      },
+      {
+        id: 3,
+        description: 'Notice the spacing is 5 times less the minimum of width and height.',
+      }
+    ],
     minimumWidth: 11,
     maximumWidth: 55,
     minimumHeight: 11,
@@ -302,7 +409,7 @@ export const world1Levels: LevelDefinition[] = [
 `,
     referenceGenerator: (width, height) => {
       const buffer = createBuffer(width, height)
-      const spacing = Math.max(2, Math.floor(Math.min(width, height) / 5))
+      const spacing = Math.floor(Math.min(width, height) / 5)
       for (let y = 0; y < height; y += 1) {
         for (let x = 0; x < width; x += 1) {
           if (x % spacing === 0 || y % spacing === 0) {
@@ -324,6 +431,12 @@ export const world1Levels: LevelDefinition[] = [
     description:
       'Draw an orange slice: an orange outer circle, a light orange inner circle, and white cross + diagonal dividers.',
     difficulty: 'Extreme',
+    hints: [
+      {
+        id: 1,
+        description: 'Notice the inner circle is 2 pixels smaller than the outer circle.',
+      },
+    ],
     minimumWidth: 17,
     maximumWidth: 57,
     minimumHeight: 17,

@@ -29,7 +29,7 @@ const DimensionControls = ({
         <div className="slider-row">
           <label htmlFor="width-slider">W: {width}</label>
           <input
-            id="width-slider"
+            id="slider"
             type="range"
             min={minWidth}
             max={maxWidth}
@@ -41,7 +41,7 @@ const DimensionControls = ({
         <div className="slider-row">
           <label htmlFor="height-slider">H: {height}</label>
           <input
-            id="height-slider"
+            id="slider"
             type="range"
             min={minHeight}
             max={maxHeight}
