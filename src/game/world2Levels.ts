@@ -5,7 +5,6 @@ const black  = { r: 0,   g: 0,   b: 0,   a: 255 }
 const white  = { r: 255, g: 255, b: 255, a: 255 }
 const red    = { r: 220, g: 36,  b: 31,  a: 255 }
 const yellow = { r: 255, g: 215, b: 0,   a: 255 }
-const green  = { r: 34,  g: 177, b: 76,  a: 255 }
 
 const createBuffer = (width: number, height: number) => new PixelBuffer(width, height, white)
 
