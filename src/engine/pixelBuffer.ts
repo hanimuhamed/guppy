@@ -23,7 +23,7 @@ export class PixelBuffer {
     height: number,
     fill?: RgbaColor,
   ) {
-    console.count('PixelBuffer created')
+    // console.count('PixelBuffer created')
 
     this.width = width
     this.height = height

@@ -11,8 +11,12 @@
       "token": "comment"
     },
     {
-      "foreground": "f1fa8c",
+      "foreground": "ffec9a",
       "token": "string"
+    },
+    {
+      "foreground": "cdeb62",
+      "token": "number"
     },
     {
       "foreground": "bd93f9",

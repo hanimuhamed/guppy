@@ -342,6 +342,7 @@ function App() {
       return
     }
     const totalWidth = splitRef.current.clientWidth
+    console.log("totalWidth", totalWidth)
     if (totalWidth > 0) {
       setLeftWidth(Math.floor(totalWidth * 0.275))
     }

@@ -12,7 +12,7 @@ export const createPixelData = (
   const data = new Uint8ClampedArray(width * height * 4)
 
   store.set(id, data)
-  console.count("pixel data created")
+  // console.count("pixel data created")
   return { id, data }
 }
 
@@ -28,5 +28,5 @@ export const getPixelData = (id: number) => {
 
 export const deletePixelData = (id: number) => {
   store.delete(id)
-  console.count("pixel data deleted")
+  // console.count("pixel data deleted")
 }

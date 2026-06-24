@@ -15,9 +15,9 @@
   --text-dimmed: color-mix(in oklab, var(--text) 30%, var(--dark));
 
   --primary: #FF5C5C;
-  --accent: #f1fa8c;
+  --accent: #ffd700;
 
-  --success: #BCED09;
+  --success: #cdeb62;
   --danger: #FF5C5C;
   
   font-family: "Space Mono";
