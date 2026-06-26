@@ -3,6 +3,7 @@ import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { Profile } from './pages/Profile'
+import { Levels } from './pages/Levels'
 import { LevelPage } from './pages/LevelPage'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
     element: <Profile />,
   },
   {
-    path: '/level/:id',
+    path: '/levels',
+    element: <Levels />,
+  },
+  {
+    path: '/levels/:id',
     element: <LevelPage />,
   },
 ])

@@ -303,7 +303,7 @@ export const LevelPage: React.FC = () => {
         
         <div className="level-nav-container">
           <Link 
-            to={prevLevel ? `/level/${prevLevel.id}` : '#'}
+            to={prevLevel ? `/levels/${prevLevel.id}` : '#'}
             className="ghost-button" 
             style={{ opacity: prevLevel ? 1 : 0.5, pointerEvents: prevLevel ? 'auto' : 'none' }}
           >
@@ -327,7 +327,7 @@ export const LevelPage: React.FC = () => {
           </div>
 
           <Link 
-            to={nextLevel ? `/level/${nextLevel.id}` : '#'}
+            to={nextLevel ? `/levels/${nextLevel.id}` : '#'}
             className="ghost-button" 
             style={{ opacity: nextLevel ? 1 : 0.5, pointerEvents: nextLevel ? 'auto' : 'none' }}
           >

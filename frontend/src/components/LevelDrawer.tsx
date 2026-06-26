@@ -64,7 +64,7 @@ export const LevelDrawer: React.FC<LevelDrawerProps> = ({
           return (
             <Link
               key={level.id}
-              to={`/level/${level.id}`}
+              to={`/levels/${level.id}`}
               onClick={onClose}
               className="level-drawer-item"
               style={{

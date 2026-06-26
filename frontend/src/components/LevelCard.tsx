@@ -35,7 +35,7 @@ export const LevelCard: React.FC<LevelCardProps> = ({ level }) => {
 
   return (
     <Link 
-      to={`/level/${level.id}`} 
+      to={`/levels/${level.id}`} 
       className="panel level-card"
     >
       <div 

@@ -20,7 +20,7 @@
   --success: #cdeb62;
   --danger: #FF5C5C;
 
-  --extreme: #c596ff;
+  --extreme: #da70d6;
   
   font-family: "Space Mono";
   font-size: 16px;  
@@ -117,21 +117,9 @@ hr {
 }
 
 ul {
-  list-style-type: square;  /* ■ */
+  list-style-type: disc;  /* ■ */
 }
 
-ul li:nth-child(1)::marker {
-  color: var(--success);
-}
-
-ul li:nth-child(2)::marker {
-  color: var(--accent);
-}
-
-ul li:nth-child(3)::marker {
-  color: var(--danger);
-}
-
-ul li:nth-child(4)::marker {
-  color: var(--extreme);
+ul li::marker{
+  color: var(--text-muted);
 }

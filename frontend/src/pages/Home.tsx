@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { worlds } from '../game/worlds'
-import { LevelCard } from '../components/LevelCard'
-import { Avatar } from '../components/Avatar'
-import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import CanvasPanel from '../components/CanvasPanel'
 import EditorPanel from '../components/EditorPanel'
@@ -12,15 +8,9 @@ import { runLevelCode } from '../runtime/runner'
 import { PixelBuffer } from '../engine/pixelBuffer'
 
 export const Home: React.FC = () => {
-  const { user, logout } = useAuth()
   const { progress } = useProgress()
 
   const allLevels = worlds.flat()
-  const totalLevels = allLevels.length
-  const completedLevels = progress.completedLevels.length
-  const attemptedLevels = Object.keys(progress.levelCode).length
-  const completionPercentage = totalLevels === 0 ? 0 : Math.round((completedLevels / totalLevels) * 100)
-  const successRate = attemptedLevels === 0 ? 0 : Math.round((completedLevels / attemptedLevels) * 100)
 
   let easyCount = 0, mediumCount = 0, hardCount = 0, extremeCount = 0
   let totalEasy = 0, totalMedium = 0, totalHard = 0, totalExtreme = 0
@@ -40,27 +30,22 @@ export const Home: React.FC = () => {
       else if (level.difficulty === 'Extreme') extremeCount++
     }
   })
-
-  const statsData = [
-    { label: 'Easy', count: easyCount, total: totalEasy, colorClass: 'difficulty-pill--easy', bgClass: 'var(--success)' },
-    { label: 'Medium', count: mediumCount, total: totalMedium, colorClass: 'difficulty-pill--medium', bgClass: 'var(--accent)' },
-    { label: 'Hard', count: hardCount, total: totalHard, colorClass: 'difficulty-pill--hard', bgClass: 'var(--danger)' },
-    { label: 'Extreme', count: extremeCount, total: totalExtreme, colorClass: 'difficulty-pill--extreme', bgClass: 'var(--extreme)' },
-  ]
   
   const appName = 'guppy'
   const appLogo = (
-    <h1 style={{fontSize: '48px'}}>
+    <h1 style={{fontSize: '72px'}}>
       <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
     </h1>
   )
 
-  const [exampleCode, setExampleCode] = useState(`def solve(width, height):\n    # Let's draw a smiley face!\n    cx, cy = width // 2, height // 2\n    r = min(width, height) // 2 - 1\n    \n    for y in range(height):\n        for x in range(width):\n            dx, dy = x - cx, y - cy\n            dist_sq = dx*dx + dy*dy\n            \n            # Face background\n            if dist_sq <= r*r:\n                setPixel(x, y, '#FBBF24')\n                \n            # Eyes\n            if y == cy - r//3 and abs(dx) == r//3:\n                setPixel(x, y, '#1F2937')\n                \n            # Smile\n            if y == cy + r//3 and abs(dx) <= r//3 and y > cy:\n                setPixel(x, y, '#1F2937')\n`)
-  const [exampleWidth, setExampleWidth] = useState(11)
-  const [exampleHeight, setExampleHeight] = useState(11)
+  const [exampleCode, setExampleCode] = useState(`def solve(width, height):\n    # Let's draw a Puffer fish!\n    cx, cy = width // 2, height // 2\n    r = min(width, height) // 2 - 1\n    \n    for y in range(height):\n        for x in range(width):\n            dx, dy = x - cx, y - cy\n            dist_sq = dx*dx + dy*dy\n            \n            # Body \n            if dist_sq <= r*r:\n                setPixel(x, y, '#FBBF24')\n                \n            # Eyes\n            if y == cy and abs(dx) == r//2:\n                setPixel(x, y, '#1F2937')\n                \n            # Mouth\n            if y == cy + r//4 and abs(dx) <= r//4 and y > cy:\n                setPixel(x, y, '#1F2937')\n`)
+  const [exampleWidth, setExampleWidth] = useState(15)
+  const [exampleHeight, setExampleHeight] = useState(15)
   const [exampleOutput, setExampleOutput] = useState<PixelBuffer | null>(null)
   const [exampleError, setExampleError] = useState<string | null>(null)
   const [isExampleRunning, setIsExampleRunning] = useState(false)
+
+  let current_year = new Date().getFullYear()
 
   useEffect(() => {
     const handle = window.setTimeout(async () => {
@@ -80,82 +65,13 @@ export const Home: React.FC = () => {
 
   return (
     <div className="app-shell home-container">
-      <aside className="panel home-sidebar">
-        <div className="home-profile-section">
-          {user ? (
-            <>
-              <Avatar 
-                username={user.username} 
-                favoriteColor={user.favoriteColor} 
-                size={126} 
-              />
-              <h2 className="home-username">{user.username}</h2>
-              <button className="ghost-button home-logout-btn" onClick={logout}>
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <>
-              <Avatar 
-                username="Guest" 
-                size={126} 
-              />
-              <h2 className="home-username">Guest</h2>
-              <div className="home-guest-actions">
-                <Link to="/login" className="ghost-button home-guest-login">Login</Link>
-                <Link to="/signup" className="ghost-button home-guest-signup">Signup</Link>
-              </div>
-            </>
-          )}
-        </div>
-
-        <hr className="home-divider" />
-
-        <div className="home-stats-section">
-          <div className="home-stats-header">
-            <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Total Progress</span>
-            <span style={{ fontSize: '12px'}}>{completionPercentage}%</span>
-          </div>
-          <div className="home-progress-bar-container">
-            <div className="home-progress-bar-fill" style={{ width: `${completionPercentage}%` }} />
-          </div>
-
-          <div className="home-stats-list">
-            {statsData.map(stat => (
-              <div key={stat.label}>
-                <div className="home-stat-row">
-                  <span className={stat.colorClass}>{stat.label}</span>
-                  <span className="home-stat-value">{stat.count} / {stat.total}</span>
-                </div>
-                <div className="home-progress-bar-container home-progress-bar-container--secondary">
-                  <div 
-                    className="home-progress-bar-fill" 
-                    style={{ 
-                      width: `${stat.total === 0 ? 0 : (stat.count / stat.total) * 100}%`, 
-                      backgroundColor: stat.bgClass,
-                      height: '12px',
-                    }} 
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="home-stat-row" style={{ marginTop: '8px' }}>
-              <span className="home-stat-label">Success Rate</span>
-              <span className="home-stat-value">{successRate}%</span>
-            </div>
-          </div>
-        </div>
-
-        
-      </aside>
-
-      <main className="home-main">
-        <header className="app-header">
+      <main className="home-main" style={{paddingInline: '192px'}}>
+        <header className="app-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'}}>
           {appLogo}
         </header>
         <section className="about-section">
           <hr className="home-divider" />
-          <h2><span className='color-primary'>■</span> What is <code>
+          <h2><span style={{color:'var(--success)'}}>■</span> What is <code>
               <span style={{color: '#f1fa8c'}}>'guppy'</span>
             </code></h2>
           <p>
@@ -178,7 +94,7 @@ export const Home: React.FC = () => {
             </code>.
           </p>
           <hr className="home-divider" />
-          <h2><span className='color-primary'>■</span> How to Play</h2>
+          <h2><span className='color-accent'>■</span> How to Play</h2>
           <ul style={{ listStyleType: 'disc', paddingLeft: '24px' }}>
             <li>Open a level and study the target image.</li>
             <li>Write Python code to recreate it.</li>
@@ -190,7 +106,7 @@ export const Home: React.FC = () => {
           <p style={{ color: 'var(--text)', marginBottom: '16px' }}>
             Edit the Python code below to see how it affects the canvas instantly.
           </p>
-          <div className="main-split" style={{gap: '16px', height: '420px', paddingTop: '16px'}}>
+          <div className="main-split" style={{gap: '16px', height: '470px', paddingTop: '16px', paddingBottom: '16px'}}>
             <section className="left-panel" style={{ width: '40%', border: '2px solid var(--border)', background: 'var(--panel)'}}>
               <div className="left-panel-inner"  >
                 <div className="section">
@@ -204,14 +120,17 @@ export const Home: React.FC = () => {
                 <DimensionControls
                   width={exampleWidth}
                   height={exampleHeight}
-                  minWidth={3}
-                  maxWidth={25}
-                  minHeight={3}
-                  maxHeight={25}
+                  minWidth={11}
+                  maxWidth={33}
+                  minHeight={11}
+                  maxHeight={33}
                   step={2}
                   onWidthChange={w => setExampleWidth(w)}
                   onHeightChange={h => setExampleHeight(h)}
                 />
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '8px' }}>
+                  Try dragging these. Watch it puff up. ↑
+                </p>
               </div>
             </section>
             <section className="right-panel">
@@ -229,28 +148,22 @@ export const Home: React.FC = () => {
               />
             </section>
           </div>
+          <hr className="home-divider" />
+          <h2><span style={{color:'var(--extreme)'}}>■</span> Explore Levels</h2>
+          <button className='explore-levels-btn' onClick={() => window.location.href = '/levels'}>
+            <code>&gt;&gt; goto
+              <span style={{color: 'var(--accent)'}}>(
+              <span style={{color: '#f1fa8c'}}>'/levels'</span>)
+              </span>
+            </code>
+          </button>
         </section>
-
-        {worlds.map((worldLevels, index) => {
-          if (!worldLevels || worldLevels.length === 0) return null;
-          return (
-            <section key={index}>
-              <hr className="home-divider" />
-              <h2 className="panel-header home-world-header">World {index + 1}</h2>
-              <div className="home-world-grid">
-                {worldLevels.map((level) => (
-                  <LevelCard
-                    key={level.id}
-                    level={level}
-                    worldIndex={index + 1}
-                  />
-                ))}
-              </div>
-            </section>
-          )
-        })}
-        <hr className="home-divider" />
-      </main>
+        <footer className="home-footer">
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
+            &copy; {current_year} <a href="https://github.com/hanimuhamed/getsetpixel" target="_blank" rel="noopener noreferrer">guppy</a>. All rights reserved.
+          </p>
+        </footer>
+      </main>    
     </div>
   )
 }

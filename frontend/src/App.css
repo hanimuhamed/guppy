@@ -784,6 +784,7 @@ code {
   transition: all 0.1s;
   display: flex;
   flex-direction: column;
+  padding: 0px;
 }
 .level-card:hover {
   transform: translateY(-2.5%) scale(1.02) rotate(-6deg);
@@ -796,6 +797,7 @@ code {
   background-repeat: no-repeat;
   background-color: var(--bg);
   image-rendering: pixelated;
+  padding: 8px;
 }
 .level-card-content {
   padding: 12px;
@@ -920,7 +922,7 @@ code {
   padding: 16px;
 }
 .home-sidebar {
-  width: 250px;
+  width: 260px;
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
@@ -949,8 +951,8 @@ code {
   color: var(--primary);
 }
 .home-divider {
-  margin: 16px 0;
-  color: var(--border);
+  margin: 24px 0;
+  background: var(--panel);
 }
 .home-stats-section {
   display: flex;
@@ -989,10 +991,15 @@ code {
 }
 .home-world-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 24px;
   padding: 24px;
   overflow: visible; 
+}
+
+.progress-divider {
+  margin: 16px 0;
+  color: var(--border);
 }
 
 /* LevelPage Styles */
@@ -1057,4 +1064,20 @@ code {
   height: 4px;
   width: 100%;
   overflow: hidden;
+}
+
+.explore-levels-btn {
+  /* make it big, centre*/
+  display: block;
+  margin: 0 auto;
+  padding: 24px 24px;
+  font-size: 36px;
+  background: none;
+  color: var(--text-muted);
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+}
+.explore-levels-btn:hover {
+  color: var(--text);
 }
