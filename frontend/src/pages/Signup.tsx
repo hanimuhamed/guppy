@@ -1,21 +1,26 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { HexColorPicker } from 'react-colorful'
 import { useAuth } from '../context/AuthContext'
 import { Avatar } from '../components/Avatar'
 
 export const Signup: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [favoriteColor, setFavoriteColor] = useState('#FF5C5C')
-  const [leastFavoriteColor, setLeastFavoriteColor] = useState('#272a31')
   const [error, setError] = useState('')
   const { signup } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
     try {
-      await signup({ username, password, favoriteColor, leastFavoriteColor })
+      await signup({ username, password, favoriteColor })
       navigate('/')
     } catch (err: any) {
       setError(err.message || 'Failed to sign up')
@@ -33,16 +38,12 @@ export const Signup: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="auth-form">
           
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
             <Avatar 
               username={username || 'preview'} 
               favoriteColor={favoriteColor} 
-              leastFavoriteColor={leastFavoriteColor}
-              size={63}
+              size={126}
             />
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-              This will be your procedurally generated avatar.
-            </div>
           </div>
 
           <div className="auth-field">
@@ -65,25 +66,19 @@ export const Signup: React.FC = () => {
               required
             />
           </div>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <div className="auth-field" style={{ flex: 1 }}>
-              <label className="auth-label">Favorite Color</label>
-              <input 
-                type="color" 
-                value={favoriteColor} 
-                onChange={e => setFavoriteColor(e.target.value)}
-                style={{ width: '100%', cursor: 'pointer' }}
-              />
-            </div>
-            <div className="auth-field" style={{ flex: 1 }}>
-              <label className="auth-label">Least Favorite Color</label>
-              <input 
-                type="color" 
-                value={leastFavoriteColor} 
-                onChange={e => setLeastFavoriteColor(e.target.value)}
-                style={{ width: '100%', cursor: 'pointer' }}
-              />
-            </div>
+          <div className="auth-field">
+            <label className="auth-label">Confirm Password</label>
+            <input 
+              type="password" 
+              value={confirmPassword} 
+              onChange={e => setConfirmPassword(e.target.value)}
+              className="auth-input"
+              required
+            />
+          </div>
+          <div className="auth-field" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label className="auth-label">Favorite Color</label>
+            <HexColorPicker color={favoriteColor} onChange={setFavoriteColor} />
           </div>
           
           <button type="submit" className="auth-submit" style={{ marginTop: '8px' }}>

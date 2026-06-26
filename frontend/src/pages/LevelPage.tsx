@@ -271,9 +271,11 @@ export const LevelPage: React.FC = () => {
 
   const appName = 'guppy'
   const appLogo = (
-    <h1>
-      <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
-    </h1>
+    <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <h1>
+        <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
+      </h1>
+    </Link>
   )
 
   const accuracyPercent = stats ? (stats.accuracy * 100).toFixed(1) : '0.0'

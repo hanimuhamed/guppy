@@ -4,14 +4,12 @@ import { generateAvatarPixels } from '../utils/avatar'
 interface AvatarProps {
   username: string
   favoriteColor?: string
-  leastFavoriteColor?: string
   size?: number
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
   username,
   favoriteColor = '#FF5C5C',
-  leastFavoriteColor = '#272a31',
   size = 42
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -21,7 +19,8 @@ export const Avatar: React.FC<AvatarProps> = ({
     const ctx = canvasRef.current.getContext('2d')
     if (!ctx) return
 
-    const pixels = generateAvatarPixels(username, favoriteColor, leastFavoriteColor)
+    ctx.clearRect(0, 0, size, size)
+    const pixels = generateAvatarPixels(username, favoriteColor)
     const pixelSize = size / 7
 
     for (let y = 0; y < 7; y++) {
@@ -30,7 +29,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize)
       }
     }
-  }, [username, favoriteColor, leastFavoriteColor, size])
+  }, [username, favoriteColor, size])
 
   return (
     <canvas
@@ -42,7 +41,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         height: size,
         imageRendering: 'pixelated',
         border: '2px solid var(--border)',
-        backgroundColor: leastFavoriteColor
+        backgroundColor: 'var(--surface)'
       }}
       title={username}
     />

@@ -1019,3 +1019,42 @@ code {
   font-size: 14px;
   position: relative;
 }
+
+.react-colorful {
+  border: 2px solid var(--panel-border);
+  background: var(--panel);
+  padding: 10px;
+  box-sizing: border-box;
+}
+.react-colorful * {
+  border-radius: 0 !important;
+}
+.react-colorful__saturation {
+  border: 2px solid var(--panel-border);
+}
+
+.home-stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.home-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.home-stat-label {
+  color: var(--text-muted);
+}
+
+.home-progress-bar-container--secondary {
+  background: var(--surface);
+  height: 4px;
+  width: 100%;
+  overflow: hidden;
+}
