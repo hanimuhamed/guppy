@@ -1,8 +1,8 @@
 :root {
   color-scheme: dark;
 
-  --dark: #272a31;
-  --bg: color-mix(in oklab, var(--dark) 85%, #000);
+  --dark: #282a30;
+  --bg: color-mix(in oklab, var(--dark) 75%, #000);
   --panel: var(--dark);
   --panel-strong: var(--primary);
   --surface: color-mix(in oklab, var(--dark) 92.5%, #fff);
@@ -19,9 +19,11 @@
 
   --success: #cdeb62;
   --danger: #FF5C5C;
+
+  --extreme: #c596ff;
   
   font-family: "Space Mono";
-  font-size: 14px;  
+  font-size: 16px;  
   line-height: 1.4;
   background: var(--bg);
   color: var(--text);
@@ -29,7 +31,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-
+/*
 @font-face {
   font-family: "Monocraft";
   src: url("src/assets/fonts/Monocraft-ttf/Monocraft-ttf/Monocraft.ttf") format("truetype");
@@ -42,7 +44,7 @@
   src: url("src/assets/fonts/mononoki//mononoki-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-}
+}*/
 
 * {
   box-sizing: border-box;
@@ -101,11 +103,9 @@ a {
 }
 
 a:hover {
-  background-color: var(--primary);
   color: var(--text);
-  text-decoration: underline;
   text-decoration-color: var(--text);
-  cursor: help;
+  cursor: pointer;
 }
 
 hr {
@@ -114,4 +114,24 @@ hr {
   flex-shrink: 0;
   height: 2px;
   background: var(--border);
+}
+
+ul {
+  list-style-type: square;  /* ■ */
+}
+
+ul li:nth-child(1)::marker {
+  color: var(--success);
+}
+
+ul li:nth-child(2)::marker {
+  color: var(--accent);
+}
+
+ul li:nth-child(3)::marker {
+  color: var(--danger);
+}
+
+ul li:nth-child(4)::marker {
+  color: var(--extreme);
 }

@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect } from 'react'
+import { Suspense, lazy } from 'react'
 import type * as monaco from 'monaco-editor'
 // import nordTheme from '../themes/Nord.json'
 // import draculaTheme from '../themes/Dracula.json'
