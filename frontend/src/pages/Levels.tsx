@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom'
 import { worlds } from '../game/worlds'
 import { LevelCard } from '../components/LevelCard'
 import { Avatar } from '../components/Avatar'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
+import { Link } from 'react-router-dom'
 
 export const Levels: React.FC = () => {
   const { user, logout } = useAuth()
@@ -35,6 +35,14 @@ export const Levels: React.FC = () => {
     }
   })
 
+  const handleLogin = () => {
+    window.location.href = '/login'
+  }
+
+  const handleSignup = () => {
+    window.location.href = '/signup'
+  }
+
   const statsData = [
     { label: 'Easy', count: easyCount, total: totalEasy, colorClass: 'difficulty-pill--easy', bgClass: 'var(--success)' },
     { label: 'Medium', count: mediumCount, total: totalMedium, colorClass: 'difficulty-pill--medium', bgClass: 'var(--accent)' },
@@ -44,9 +52,11 @@ export const Levels: React.FC = () => {
   
   const appName = 'guppy'
   const appLogo = (
-    <h1 style={{fontSize: '32px'}}>
-      <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
-    </h1>
+    <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <h1 style={{fontSize: '32px'}}>
+        <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
+      </h1>
+    </Link>
   )
 
   return (
@@ -61,9 +71,11 @@ export const Levels: React.FC = () => {
                 size={147} 
               />
               <h2 className="home-username">{user.username}</h2>
-              <button className="ghost-button home-logout-btn" onClick={logout}>
-                signOut()
-              </button>
+              <div className="home-guest-actions">
+                <button className="ghost-button home-logout-btn" onClick={logout}>
+                  signOut()
+                </button>
+              </div>
             </>
           ) : (
             <>
@@ -73,8 +85,12 @@ export const Levels: React.FC = () => {
               />
               <h2 className="home-username">Guest</h2>
               <div className="home-guest-actions">
-                <Link to="/login" className="ghost-button home-guest-login">login()</Link>
-                <Link to="/signup" className="ghost-button home-guest-signup">signUp()</Link>
+                <button className="ghost-button home-guest-login" onClick={handleLogin}>
+                  login()
+                </button>
+                <button className="ghost-button home-guest-signup" onClick={handleSignup}>
+                  signUp()
+                </button>
               </div>
             </>
           )}

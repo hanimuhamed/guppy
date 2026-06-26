@@ -36,7 +36,7 @@ export const LevelPage: React.FC = () => {
   // Redirect if not found
   useEffect(() => {
     if (!level) {
-      navigate('/')
+      navigate('/levels')
     } else {
       updateActiveLevel(level.id)
     }
@@ -271,7 +271,7 @@ export const LevelPage: React.FC = () => {
 
   const appName = 'guppy'
   const appLogo = (
-    <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to="/levels" style={{ textDecoration: 'none', color: 'inherit' }}>
       <h1>
         <span className='color-primary'>■</span><span className='color-accent'>▪</span>{appName}
       </h1>
@@ -307,7 +307,7 @@ export const LevelPage: React.FC = () => {
             className="ghost-button" 
             style={{ opacity: prevLevel ? 1 : 0.5, pointerEvents: prevLevel ? 'auto' : 'none' }}
           >
-            ◀ Prev
+            &lt; Prev
           </Link>
           
           <div style={{ position: 'relative' }}>
@@ -315,7 +315,7 @@ export const LevelPage: React.FC = () => {
               className="ghost-button level-nav-btn" 
               onClick={() => setIsDrawerOpen(prev => !prev)}
             >
-              {level.title} ▼
+              {level.title}
             </button>
             <LevelDrawer 
               isOpen={isDrawerOpen} 
@@ -331,7 +331,7 @@ export const LevelPage: React.FC = () => {
             className="ghost-button" 
             style={{ opacity: nextLevel ? 1 : 0.5, pointerEvents: nextLevel ? 'auto' : 'none' }}
           >
-            Next ▶
+            Next &gt;
           </Link>
         </div>
         

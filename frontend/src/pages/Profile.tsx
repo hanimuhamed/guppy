@@ -65,7 +65,6 @@ export const Profile: React.FC = () => {
             <Avatar 
               username={user.username} 
               favoriteColor={user.favoriteColor} 
-              leastFavoriteColor={user.leastFavoriteColor} 
               size={98} 
             />
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -73,7 +72,7 @@ export const Profile: React.FC = () => {
               <span style={{ color: 'var(--text-muted)' }}>Joined {joinDate}</span>
             </div>
           </div>
-          <Link to="/" className="ghost-button" style={{ border: '1px solid var(--border)' }}>Back to Home</Link>
+          <Link to="/levels" className="ghost-button" style={{ border: '1px solid var(--border)' }}>Back to Levels</Link>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>

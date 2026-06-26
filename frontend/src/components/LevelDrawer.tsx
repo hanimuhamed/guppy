@@ -57,9 +57,9 @@ export const LevelDrawer: React.FC<LevelDrawerProps> = ({
           const isAttempted = !!progress.levelCode[level.id]
           const isActive = level.id === activeLevelId
           
-          let iconClass = 'color-text-muted'
-          if (isSolved) iconClass = 'color-success'
-          else if (isAttempted) iconClass = 'color-accent'
+          let iconStyle = 'var(--text-muted)'
+          if (isSolved) iconStyle = 'var(--success)'
+          else if (isAttempted) iconStyle = 'var(--accent)'
 
           return (
             <Link
@@ -78,8 +78,8 @@ export const LevelDrawer: React.FC<LevelDrawerProps> = ({
                 if (!isActive) e.currentTarget.style.backgroundColor = 'transparent'
               }}
             >
-              <span className={iconClass}>■</span>
-              <span style={{ fontWeight: isActive ? 'bold' : 'normal' }}>{level.title}</span>
+              <span style={{ color: iconStyle }}>■</span>
+              <span>{level.title}</span>
             </Link>
           )
         })}

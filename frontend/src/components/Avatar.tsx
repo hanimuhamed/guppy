@@ -20,7 +20,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     if (!ctx) return
 
     ctx.clearRect(0, 0, size, size)
-    const pixels = generateAvatarPixels(username, favoriteColor)
+    const pixels = generateAvatarPixels(username, favoriteColor, 7)
     const pixelSize = size / 7
 
     for (let y = 0; y < 7; y++) {
@@ -40,7 +40,6 @@ export const Avatar: React.FC<AvatarProps> = ({
         width: size,
         height: size,
         imageRendering: 'pixelated',
-        border: '2px solid var(--border)',
         backgroundColor: 'var(--surface)'
       }}
       title={username}

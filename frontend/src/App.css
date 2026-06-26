@@ -825,8 +825,10 @@ code {
   gap: 8px;
 }
 .level-card-status {
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
+  color: var(--panel);
+  padding: 2px 6px;
 }
 
 /* Level Drawer Styles */
@@ -835,14 +837,12 @@ code {
   top: 100%;
   left: 0;
   margin-top: 8px;
-  background: var(--surface);
+  background: var(--panel);
   border: 2px solid var(--border);
-  border-radius: 4px;
   width: 300px;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 .level-drawer-header {
   margin-bottom: 12px;
@@ -858,7 +858,6 @@ code {
   gap: 8px;
   padding: 8px;
   text-decoration: none;
-  border-radius: 4px;
 }
 
 /* Auth Pages (Login/Signup) Styles */
@@ -885,11 +884,12 @@ code {
 .auth-field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 .auth-label {
   font-size: 12px;
   color: var(--text-muted);
+  padding-top: 6px;
 }
 .auth-input {
   background: var(--bg);
@@ -944,11 +944,25 @@ code {
   margin-top: 8px;
 }
 .home-guest-login {
-  border: 1px solid var(--border);
+  border: none;
+  background: var(--surface);
+}
+.home-guest-login:hover {
+  background: var(--primary);
 }
 .home-guest-signup {
-  border: 1px solid var(--primary);
-  color: var(--primary);
+  border: none;
+  background: var(--surface);
+}
+.home-guest-signup:hover {
+  background: var(--primary);
+}
+.home-logout-btn {
+  border: none;
+  background: var(--surface);
+}
+.home-logout-btn:hover {
+  background: var(--primary);
 }
 .home-divider {
   margin: 24px 0;
@@ -972,10 +986,6 @@ code {
 .home-progress-bar-fill {
   height: 100%;
   background: var(--success);
-}
-.home-logout-btn {
-  margin-top: 32px;
-  align-self: flex-start;
 }
 .home-main {
   flex: 1;
@@ -1009,7 +1019,6 @@ code {
 }
 .level-app-logo {
   color: var(--primary);
-  font-family: 'Monocraft';
   margin: 0;
   font-size: 24px;
 }
@@ -1017,14 +1026,16 @@ code {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--surface);
-  padding: 4px;
-  border-radius: 4px;
+  padding: 0px;
 }
 .level-nav-btn {
-  font-weight: bold;
   font-size: 14px;
+  width: 160px;
+  background: var(--panel);
+  /*centre text*/
+  text-align: center;
   position: relative;
+  border: none;
 }
 
 .react-colorful {

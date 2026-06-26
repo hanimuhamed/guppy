@@ -19,10 +19,10 @@ export const LevelCard: React.FC<LevelCardProps> = ({ level }) => {
   let statusText = ''
   if (isSolved) {
     statusColor = 'var(--success)'
-    statusText = 'Solved'
+    statusText = '◉ Solved'
   } else if (isAttempted) {
     statusColor = 'var(--accent)'
-    statusText = 'Attempted'
+    statusText = '◉ Attempted'
   }
 
   // derive difficulty styling, fallback to a default if not fully specified in LevelDefinition
@@ -52,9 +52,16 @@ export const LevelCard: React.FC<LevelCardProps> = ({ level }) => {
           <span className={`difficulty-pill difficulty-pill--${difficulty.toLowerCase()}`} style={{ color: diffColors[difficulty], borderColor: diffColors[difficulty] }}>
             {difficulty}
           </span>
-          <span className="level-card-status" style={{ color: statusColor }}>
-            {statusText}
-          </span>
+          {statusText=='◉ Solved' ? (
+            <span className="level-card-status" style={{ background: statusColor }}>
+              {statusText}
+            </span>
+          ) : (
+            <span className="level-card-status" style={{ background: 'none',color: statusColor }}>
+              {statusText}
+            </span>
+          )
+          }
         </div>
       </div>
     </Link>

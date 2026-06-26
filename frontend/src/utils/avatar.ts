@@ -17,7 +17,7 @@ function hashString(str: string): number {
  * mirror the left 3 columns (left half mirrored into right half).
  * Uses favoriteColor and defaults to transparent for empty space.
  */
-export function generateAvatarPixels(username: string, favoriteColor: string): string[][] {
+export function generateAvatarPixels(username: string, favoriteColor: string, size: number): string[][] {
   const seed = hashString(username)
   
   // Custom pseudo-random number generator based on the seed
@@ -27,11 +27,11 @@ export function generateAvatarPixels(username: string, favoriteColor: string): s
     return x - Math.floor(x)
   }
 
-  const grid: string[][] = Array(7).fill(null).map(() => Array(7).fill('transparent'))
+  const grid: string[][] = Array(size).fill(null).map(() => Array(size).fill('transparent'))
   
   // Generate left 4 columns
-  for (let y = 0; y < 7; y++) {
-    for (let x = 0; x < 4; x++) {
+  for (let y = size - 1; y >= 0; y--) {
+    for (let x = 0; x < size - Math.floor(size / 2); x++) {
       if (random() > 0.5) {
         grid[y][x] = favoriteColor
       } else {
@@ -41,9 +41,9 @@ export function generateAvatarPixels(username: string, favoriteColor: string): s
   }
 
   // Mirror left 3 columns into right 3 columns
-  for (let y = 0; y < 7; y++) {
-    for (let x = 0; x < 3; x++) {
-      grid[y][6 - x] = grid[y][x]
+  for (let y = size - 1; y >= 0; y--) {
+    for (let x = 0; x < Math.floor(size / 2); x++) {
+      grid[y][size - 1 - x] = grid[y][x]
     }
   }
 

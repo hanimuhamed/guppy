@@ -13,7 +13,7 @@ export const Login: React.FC = () => {
     e.preventDefault()
     try {
       await login({ username, password })
-      navigate('/')
+      navigate('/levels')
     } catch (err: any) {
       setError(err.message || 'Failed to login')
     }
@@ -60,7 +60,7 @@ export const Login: React.FC = () => {
           <Link to="/signup" style={{ color: 'var(--primary)' }}>Sign up</Link>
         </div>
         <div className="auth-footer" style={{ marginTop: '8px' }}>
-          <Link to="/">Return to Home</Link>
+          <Link to="/levels">Return to Levels</Link>
         </div>
       </div>
     </div>
