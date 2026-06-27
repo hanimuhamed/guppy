@@ -50,7 +50,7 @@ export const Login: React.FC = () => {
             />
           </div>
           
-          <button type="submit" className="auth-submit" style={{ marginTop: '8px' }}>
+          <button type="submit" className="auth-submit" style={{ marginTop: '16px' }}>
             Login
           </button>
         </form>

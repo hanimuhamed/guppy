@@ -9,7 +9,7 @@ interface AvatarProps {
 
 export const Avatar: React.FC<AvatarProps> = ({
   username,
-  favoriteColor = '#FF5C5C',
+  favoriteColor = '#667',
   size = 42
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)

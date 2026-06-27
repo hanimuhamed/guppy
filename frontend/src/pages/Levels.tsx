@@ -83,7 +83,7 @@ export const Levels: React.FC = () => {
                 username="Guest" 
                 size={147} 
               />
-              <h2 className="home-username">Guest</h2>
+              <h2 className="home-username">Ghost</h2>
               <div className="home-guest-actions">
                 <button className="ghost-button home-guest-login" onClick={handleLogin}>
                   login()

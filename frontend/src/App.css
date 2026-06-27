@@ -900,11 +900,17 @@ code {
   font-size: 14px;
 }
 .auth-submit {
-  border: 1px solid var(--primary);
-  color: var(--primary);
+  border: none;
+  background: var(--primary);
+  color: var(--text);
   font-size: 14px;
   padding: 8px;
   text-align: center;
+  cursor: pointer;
+}
+.auth-submit:hover {
+  background: var(--text);
+  color: var(--primary);
 }
 .auth-footer {
   font-size: 12px;

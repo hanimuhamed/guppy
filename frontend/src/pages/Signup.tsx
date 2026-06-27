@@ -94,11 +94,9 @@ export const Signup: React.FC = () => {
                 </div>
               )}
             </div>
-            
-            <button type="submit" className="auth-submit" style={{ marginTop: '16px' }}>
+            <button type="submit" className="auth-submit" style={{ marginTop: '32px' }}>
               Sign Up
             </button>
-
             <div className="auth-footer" style={{ marginTop: '16px', textAlign: 'left' }}>
               <span>Already have an account? </span>
               <Link to="/login" style={{ color: 'var(--primary)' }}>Login</Link>
