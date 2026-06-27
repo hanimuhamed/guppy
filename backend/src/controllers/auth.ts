@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../db/prisma'
 import { AuthenticatedRequest } from '../middlewares/auth'
@@ -10,70 +9,97 @@ const generateToken = (userId: string) => {
   })
 }
 
+// Helper to fetch user info from Google using access_token
+const getGoogleUser = async (accessToken: string) => {
+  const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+  if (!response.ok) {
+    throw new Error('Failed to fetch Google user profile')
+  }
+  return response.json()
+}
+
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { username, password, favoriteColor, leastFavoriteColor } = req.body
+    const { token, username, favoriteColor } = req.body
 
-    if (!username || !password) {
-      return res.status(400).json({ error: 'Username and password are required' })
+    if (!token || !username) {
+      return res.status(400).json({ error: 'Google token and username are required' })
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { username }
+    const payload = await getGoogleUser(token)
+    
+    if (!payload || !payload.email || !payload.sub) {
+      return res.status(400).json({ error: 'Invalid Google token' })
+    }
+
+    const email = payload.email
+    const googleId = payload.sub
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email },
+          { googleId },
+          { username }
+        ]
+      }
     })
 
     if (existingUser) {
-      return res.status(400).json({ error: 'Username already exists' })
+      if (existingUser.username === username) {
+        return res.status(400).json({ error: 'Username already exists' })
+      }
+      return res.status(400).json({ error: 'Account already exists. Please log in.' })
     }
-
-    const passwordHash = await bcrypt.hash(password, 10)
 
     const user = await prisma.user.create({
       data: {
         username,
-        passwordHash,
+        email,
+        googleId,
         favoriteColor: favoriteColor || '#FF5C5C',
-        leastFavoriteColor: leastFavoriteColor || '#272a31'
       }
     })
 
-    const token = generateToken(user.id)
-    
-    // Omit passwordHash
-    const { passwordHash: _, ...safeUser } = user
-
-    res.json({ token, user: safeUser })
+    const jwtToken = generateToken(user.id)
+    res.json({ token: jwtToken, user })
   } catch (err: any) {
     console.error('Signup error:', err)
-    res.status(500).json({ error: 'Internal server error' })
+    res.status(500).json({ error: 'Internal server error or invalid token' })
   }
 }
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body
+    const { token } = req.body
+
+    if (!token) {
+      return res.status(400).json({ error: 'Google token is required' })
+    }
+
+    const payload = await getGoogleUser(token)
+    
+    if (!payload || !payload.email) {
+      return res.status(400).json({ error: 'Invalid Google token' })
+    }
+
+    const email = payload.email
 
     const user = await prisma.user.findUnique({
-      where: { username }
+      where: { email }
     })
 
     if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' })
+      return res.status(404).json({ error: 'Account not found. Please sign up first.' })
     }
 
-    const validPassword = await bcrypt.compare(password, user.passwordHash)
-    
-    if (!validPassword) {
-      return res.status(400).json({ error: 'Invalid credentials' })
-    }
-
-    const token = generateToken(user.id)
-    const { passwordHash: _, ...safeUser } = user
-
-    res.json({ token, user: safeUser })
+    const jwtToken = generateToken(user.id)
+    res.json({ token: jwtToken, user })
   } catch (err: any) {
     console.error('Login error:', err)
-    res.status(500).json({ error: 'Internal server error' })
+    res.status(500).json({ error: 'Internal server error or invalid token' })
   }
 }
 
@@ -82,6 +108,5 @@ export const getMe = async (req: AuthenticatedRequest, res: Response) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
   
-  const { passwordHash: _, ...safeUser } = req.user
-  res.json(safeUser)
+  res.json(req.user)
 }

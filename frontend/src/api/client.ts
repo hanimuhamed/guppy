@@ -4,7 +4,6 @@ export interface User {
   id: string
   username: string
   favoriteColor: string
-  leastFavoriteColor: string
   joinDate: string
 }
 

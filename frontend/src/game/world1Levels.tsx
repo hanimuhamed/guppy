@@ -28,7 +28,7 @@ export const world1Levels: LevelDefinition[] = [
         </p>
 
         <p>
-          Use <code>setPixel<span style={{color: '#ffd700'}}>(</span>x, y, <span style={{color: '#f1fa8c'}}>'#RRGGBB'</span><span style={{color: '#ffd700'}}>)</span></code> to set the pixel color at
+          Use <code>setPixel<span style={{color: '#ffd700'}}>(</span>x, y, <span style={{color: 'var(--string)'}}>'#RRGGBB'</span><span style={{color: '#ffd700'}}>)</span></code> to set the pixel color at
           position <code><span style={{color: '#ffd700'}}>(</span>x, y<span style={{color: '#ffd700'}}>)</span></code>.
         </p>
 

@@ -21,9 +21,10 @@
   --danger: #FF5C5C;
 
   --extreme: #da70d6;
+  --string: #ffec9a;
   
   font-family: "Space Mono";
-  font-size: 16px;  
+  font-size: 15px;  
   line-height: 1.4;
   background: var(--bg);
   color: var(--text);
@@ -84,7 +85,7 @@ p {
 }
 
 p {
-  line-height: 2;
+  line-height: 1.8;
   margin-bottom: 1.2em;
 }
 
@@ -118,6 +119,7 @@ hr {
 
 ul {
   list-style-type: disc;  /* ■ */
+  line-height: 1.8;
 }
 
 ul li::marker{

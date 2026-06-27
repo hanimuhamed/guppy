@@ -6,6 +6,7 @@ import EditorPanel from '../components/EditorPanel'
 import DimensionControls from '../components/DimensionControls'
 import { runLevelCode } from '../runtime/runner'
 import { PixelBuffer } from '../engine/pixelBuffer'
+import { Footer } from '../components/Footer'
 
 export const Home: React.FC = () => {
   const { progress } = useProgress()
@@ -44,9 +45,6 @@ export const Home: React.FC = () => {
   const [exampleOutput, setExampleOutput] = useState<PixelBuffer | null>(null)
   const [exampleError, setExampleError] = useState<string | null>(null)
   const [isExampleRunning, setIsExampleRunning] = useState(false)
-
-  let current_year = new Date().getFullYear()
-
   const runIdRef = useRef(0)
   const codeRef = useRef(exampleCode)
   const [autoRunEnabled, setAutoRunEnabled] = useState(false)
@@ -102,14 +100,21 @@ export const Home: React.FC = () => {
         <header className="app-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'}}>
           {appLogo}
         </header>
+        <button className='explore-levels-btn' onClick={() => window.location.href = '/levels'}>
+          <code>&gt;&gt; goto
+            <span style={{color: 'var(--accent)'}}>(
+            <span style={{color: 'var(--string)'}}>'/levels'</span>)
+            </span>
+          </code>
+        </button>
         <section className="about-section">
           <hr className="home-divider" />
           <h2><span style={{color:'var(--success)'}}>■</span> What is <code>
-              <span style={{color: '#f1fa8c'}}>'guppy'</span>
+              <span style={{color: 'var(--string)'}}>'guppy'</span>
             </code></h2>
           <p>
             <code>
-              <span style={{color: '#f1fa8c'}}>'guppy'</span>
+              <span style={{color: 'var(--string)'}}>'guppy'</span>
             </code> is a programming puzzle game where you recreate pixel art by
             writing <a style={{ color: 'var(--primary)', textDecoration: 'underline' }} href="https://docs.python.org/3/" target="_blank" rel="noopener noreferrer">Python</a> code.<br/>
             The target images change with the canvas dimensions, so your solutions 
@@ -117,7 +122,7 @@ export const Home: React.FC = () => {
             Use the built-in function <code>setPixel
               <span style={{color: 'var(--accent)'}}>(</span>
               x, y, 
-              <span style={{color: '#f1fa8c'}}>'#RRGGBB'</span>
+              <span style={{color: 'var(--string)'}}>'#RRGGBB'</span>
               <span style={{color: 'var(--accent)'}}>)</span>
             </code> to 
             set the color of a pixel at coordinates <code>
@@ -177,7 +182,7 @@ export const Home: React.FC = () => {
                 errorMessage={exampleError}
                 onReset={() => {}}
                 onRun={() => runExample('manual')}
-                fontSize={progress.codeFontSize || 14}
+                fontSize={12}
               />
             </section>
           </div>
@@ -186,16 +191,12 @@ export const Home: React.FC = () => {
           <button className='explore-levels-btn' onClick={() => window.location.href = '/levels'}>
             <code>&gt;&gt; goto
               <span style={{color: 'var(--accent)'}}>(
-              <span style={{color: '#f1fa8c'}}>'/levels'</span>)
+              <span style={{color: 'var(--string)'}}>'/levels'</span>)
               </span>
             </code>
           </button>
         </section>
-        <footer className="home-footer">
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
-            &copy; {current_year} <a href="https://github.com/hanimuhamed/getsetpixel" target="_blank" rel="noopener noreferrer">guppy</a>. All rights reserved.
-          </p>
-        </footer>
+        <Footer />
       </main>    
     </div>
   )

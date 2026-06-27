@@ -1,10 +1,13 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
 import { Profile } from './pages/Profile'
 import { Levels } from './pages/Levels'
 import { LevelPage } from './pages/LevelPage'
+import { Terms } from './pages/Terms'
+import { Privacy } from './pages/Privacy'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
 import './App.css'
@@ -34,6 +37,14 @@ const router = createBrowserRouter([
     path: '/levels/:id',
     element: <LevelPage />,
   },
+  {
+    path: '/terms',
+    element: <Terms />,
+  },
+  {
+    path: '/privacy',
+    element: <Privacy />,
+  },
 ])
 
 import { warmupPyWorker } from './runtime/runner'
@@ -43,11 +54,13 @@ void warmupPyWorker()
 
 function App() {
   return (
-    <AuthProvider>
-      <ProgressProvider>
-        <RouterProvider router={router} />
-      </ProgressProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy-client-id'}>
+      <AuthProvider>
+        <ProgressProvider>
+          <RouterProvider router={router} />
+        </ProgressProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   )
 }
 

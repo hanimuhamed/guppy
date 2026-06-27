@@ -5,6 +5,7 @@ import { Avatar } from '../components/Avatar'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { Link } from 'react-router-dom'
+import { Footer } from '../components/Footer'
 
 export const Levels: React.FC = () => {
   const { user, logout } = useAuth()
@@ -158,7 +159,7 @@ export const Levels: React.FC = () => {
       </aside>
 
       <main className="home-main">
-        <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <header className="app-header-sticky" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {appLogo}
           <div className="mobile-only" style={{ position: 'relative' }} ref={menuRef}>
             <button 
@@ -194,6 +195,7 @@ export const Levels: React.FC = () => {
           )
         })}
         <hr className="home-divider" />
+        <Footer/>
       </main>
     </div>
   )

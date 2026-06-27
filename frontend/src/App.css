@@ -399,7 +399,7 @@
 }
 
 .section-title {
-  font-size: 13px;
+  font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--text-muted);
@@ -909,7 +909,7 @@ code {
   background: var(--primary);
   color: var(--text);
   font-size: 14px;
-  padding: 8px;
+  padding: 12px;
   text-align: center;
   cursor: pointer;
 }
@@ -1142,11 +1142,18 @@ code {
   }
   
   .app-shell {
-    padding: 0px !important;
-    padding-inline: 8px !important;
-    padding-bottom: 8px !important;
+    padding: 0px 0 0 0;
+    height: 100vh !important;
     height: 100dvh !important;
     overflow-y: auto !important;
+  }
+  
+  /* Bulletproof bottom gap for all mobile pages */
+  .app-shell::after {
+    content: "";
+    display: block;
+    min-height: 24px;
+    flex-shrink: 0;
   }
   
   .home-main-content {
@@ -1167,13 +1174,19 @@ code {
     background: var(--bg);
     padding: 12px 8px 8px 8px !important;
   }
+  .app-header-sticky {
+    position: sticky !important;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
   
   .main-split {
     flex-direction: column !important;
     height: auto !important;
     overflow: visible !important;
     gap: 16px !important;
-    padding: 0px 0px 0px 0px;
+    padding: 0 8px 24px 8px; /* Increased bottom padding for gap */
   }
   
   .left-panel {
@@ -1186,6 +1199,7 @@ code {
     width: 100% !important;
     height: 600px !important;
     flex: 0 0 600px !important;
+    margin-bottom: 24px !important;
   }
   
   .divider.vertical {
@@ -1201,9 +1215,14 @@ code {
     width: 100%;
   }
 
+  .auth-container {
+    padding: 0 12px !important;
+  }
+
   .auth-panel {
     width: 100% !important;
     padding: 16px !important;
+    margin: 32px auto !important;
   }
 
   .explore-levels-btn {
@@ -1259,4 +1278,10 @@ code {
 }
 .explore-levels-btn:hover {
   color: var(--text);
+}
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding: 16px;
 }

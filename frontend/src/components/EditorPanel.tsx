@@ -112,6 +112,8 @@ const EditorPanel = ({
               scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
               wordWrap: 'on',
               mouseWheelZoom: true,
+              /* margin smaller*/
+              lineNumbersMinChars: 0,
             }}
           />
         </Suspense>

@@ -13,6 +13,7 @@ import DimensionControls from '../components/DimensionControls'
 import EditorPanel from '../components/EditorPanel'
 import HintItem from '../components/HintItem'
 import { LevelDrawer } from '../components/LevelDrawer'
+import { Footer } from '../components/Footer'
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 
@@ -425,6 +426,7 @@ export const LevelPage: React.FC = () => {
             fontSize={progress.codeFontSize || 14}
           />
         </section>
+        <Footer mobileOnly={true} />
       </main>
     </div>
   )
