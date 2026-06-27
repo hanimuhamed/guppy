@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { worlds } from '../game/worlds'
 import { useProgress } from '../context/ProgressContext'
 import CanvasPanel from '../components/CanvasPanel'
@@ -39,7 +39,7 @@ export const Home: React.FC = () => {
   )
 
   const [exampleCode, setExampleCode] = useState(`def solve(width, height):\n    # Let's draw a Puffer fish!\n    cx, cy = width // 2, height // 2\n    r = min(width, height) // 2 - 1\n    \n    for y in range(height):\n        for x in range(width):\n            dx, dy = x - cx, y - cy\n            dist_sq = dx*dx + dy*dy\n            \n            # Body \n            if dist_sq <= r*r:\n                setPixel(x, y, '#FBBF24')\n                \n            # Eyes\n            if y == cy and abs(dx) == r//2:\n                setPixel(x, y, '#1F2937')\n                \n            # Mouth\n            if y == cy + r//4 and abs(dx) <= r//4 and y > cy:\n                setPixel(x, y, '#1F2937')\n`)
-  const [exampleWidth, setExampleWidth] = useState(15)
+  const [exampleWidth, setExampleWidth] = useState(31)
   const [exampleHeight, setExampleHeight] = useState(15)
   const [exampleOutput, setExampleOutput] = useState<PixelBuffer | null>(null)
   const [exampleError, setExampleError] = useState<string | null>(null)
@@ -47,25 +47,58 @@ export const Home: React.FC = () => {
 
   let current_year = new Date().getFullYear()
 
-  useEffect(() => {
-    const handle = window.setTimeout(async () => {
+  const runIdRef = useRef(0)
+  const codeRef = useRef(exampleCode)
+  const [autoRunEnabled, setAutoRunEnabled] = useState(false)
+
+  const runExample = async (reason: 'manual' | 'auto' | 'dimension' = 'auto') => {
+    if (!autoRunEnabled && reason !== 'manual') return
+    const currentRunId = ++runIdRef.current
+    
+    if (reason === 'manual') {
       setIsExampleRunning(true)
-      try {
-        const out = await runLevelCode(exampleCode, exampleWidth, exampleHeight)
-        setExampleOutput(out)
-        setExampleError(null)
-      } catch (err: any) {
-        setExampleError(err.message)
-      } finally {
+      setExampleError(null)
+    }
+
+    try {
+      const out = await runLevelCode(codeRef.current, exampleWidth, exampleHeight)
+      if (currentRunId !== runIdRef.current) return
+      setExampleOutput(out)
+      setExampleError(null)
+    } catch (err: any) {
+      if (currentRunId !== runIdRef.current) return
+      setExampleError(err.message)
+    } finally {
+      if (currentRunId === runIdRef.current) {
         setIsExampleRunning(false)
       }
+    }
+  }
+
+  useEffect(() => {
+    void runExample('dimension')
+  }, [exampleWidth, exampleHeight, autoRunEnabled])
+
+  useEffect(() => {
+    if (codeRef.current === exampleCode) return
+    codeRef.current = exampleCode
+    if (!autoRunEnabled) return
+    const handle = window.setTimeout(() => {
+      void runExample('auto')
     }, 500)
     return () => window.clearTimeout(handle)
-  }, [exampleCode, exampleWidth, exampleHeight])
+  }, [exampleCode, autoRunEnabled])
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      setAutoRunEnabled(true)
+    }, 100)
+    return () => window.clearTimeout(handle)
+  }, [])
 
   return (
     <div className="app-shell home-container">
-      <main className="home-main" style={{paddingInline: '192px'}}>
+      <main className="home-main home-main-content">
         <header className="app-header" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'}}>
           {appLogo}
         </header>
@@ -143,7 +176,7 @@ export const Home: React.FC = () => {
                 modelPath="example"
                 errorMessage={exampleError}
                 onReset={() => {}}
-                onRun={() => {}}
+                onRun={() => runExample('manual')}
                 fontSize={progress.codeFontSize || 14}
               />
             </section>

@@ -301,50 +301,52 @@ export const LevelPage: React.FC = () => {
           {appLogo}
         </div>
         
-        <div className="level-nav-container">
-          <Link 
-            to={prevLevel ? `/levels/${prevLevel.id}` : '#'}
-            className="ghost-button" 
-            style={{ opacity: prevLevel ? 1 : 0.5, pointerEvents: prevLevel ? 'auto' : 'none' }}
-          >
-            &lt; Prev
-          </Link>
-          
-          <div style={{ position: 'relative' }}>
-            <button 
-              className="ghost-button level-nav-btn" 
-              onClick={() => setIsDrawerOpen(prev => !prev)}
-            >
-              {level.title}
-            </button>
-            <LevelDrawer 
-              isOpen={isDrawerOpen} 
-              onClose={() => setIsDrawerOpen(false)} 
-              worldLevels={worldLevels} 
-              worldIndex={worldIndex + 1}
-              activeLevelId={level.id}
-            />
-          </div>
-
-          <Link 
-            to={nextLevel ? `/levels/${nextLevel.id}` : '#'}
-            className="ghost-button" 
-            style={{ opacity: nextLevel ? 1 : 0.5, pointerEvents: nextLevel ? 'auto' : 'none' }}
-          >
-            Next &gt;
-          </Link>
-        </div>
-        
-        <div className="header-meta">
+        <div className="header-meta desktop-only">
           <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">Pyodide</a>
           <span> + </span>
           <a href="https://microsoft.github.io/monaco-editor/" target="_blank" rel="noopener noreferrer">Monaco</a>
         </div>
       </header>
       
+      
+      
       <main className="main-split" ref={splitRef}>
         <section className="left-panel" style={{ width: leftWidth ? `${leftWidth}px` : '50%' }}>
+          
           <div className="panel left-panel-inner">
+            <div className="level-sub-header">
+        <Link 
+          to={prevLevel ? `/levels/${prevLevel.id}` : '#'}
+          className="ghost-button" 
+          style={{ opacity: prevLevel ? 1 : 0.5, pointerEvents: prevLevel ? 'auto' : 'none', fontSize: '20px'}}
+        >
+          &lt;
+        </Link>
+        
+        <div style={{ position: 'relative' }}>
+          <button 
+            className="ghost-button level-nav-btn" 
+            onClick={() => setIsDrawerOpen(prev => !prev)}
+          >
+            {level.title}
+          </button>
+          <LevelDrawer 
+            isOpen={isDrawerOpen} 
+            onClose={() => setIsDrawerOpen(false)} 
+            worldLevels={worldLevels} 
+            worldIndex={worldIndex + 1}
+            activeLevelId={level.id}
+          />
+        </div>
+
+        <Link 
+          to={nextLevel ? `/levels/${nextLevel.id}` : '#'}
+          className="ghost-button" 
+          style={{ opacity: nextLevel ? 1 : 0.5, pointerEvents: nextLevel ? 'auto' : 'none', fontSize: '20px'}}
+        >
+          &gt;
+        </Link>
+      </div>
             <div className="section">
               <h1>{level.index}. {level.title}</h1>
               <div className={`difficulty-pill difficulty-pill--${level.difficulty.toLowerCase()}`}>

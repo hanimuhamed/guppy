@@ -8,7 +8,7 @@ const HintItem = ({ hint }: { hint: { id: number; description: React.ReactNode }
     <div className={`hint${open ? ' hint--open' : ''}`}>
       <button className="hint-header" onClick={() => setOpen((prev) => !prev)}>
         <span>Hint {hint.id}</span>
-        <span className={`hint-chevron${open ? ' hint-chevron--up' : ''}`}>⏷</span>
+        <span className={`hint-chevron${open ? ' hint-chevron--up' : ''}`}>^</span>
       </button>
       {open && (
         <div className="hint-body">{hint.description}</div>

@@ -35,9 +35,9 @@ export const Signup: React.FC = () => {
           Create Account
         </div>
         
-        {error && <div className="auth-error">{error}</div>}
         
-        <form onSubmit={handleSubmit} className="auth-form" style={{ display: 'flex', gap: '32px', flexDirection: 'row' }}>
+        
+        <form onSubmit={handleSubmit} className="auth-form auth-form-split">
           
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Avatar 
@@ -94,9 +94,11 @@ export const Signup: React.FC = () => {
                 </div>
               )}
             </div>
+            
             <button type="submit" className="auth-submit" style={{ marginTop: '32px' }}>
               Sign Up
             </button>
+            {error && <div className="auth-error">{error}</div>}
             <div className="auth-footer" style={{ marginTop: '16px', textAlign: 'left' }}>
               <span>Already have an account? </span>
               <Link to="/login" style={{ color: 'var(--primary)' }}>Login</Link>

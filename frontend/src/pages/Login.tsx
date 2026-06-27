@@ -26,7 +26,7 @@ export const Login: React.FC = () => {
           Welcome Back
         </div>
         
-        {error && <div className="auth-error">{error}</div>}
+        
         
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-field">
@@ -53,6 +53,7 @@ export const Login: React.FC = () => {
           <button type="submit" className="auth-submit" style={{ marginTop: '16px' }}>
             Login
           </button>
+          {error && <div className="auth-error">{error}</div>}
         </form>
 
         <div className="auth-footer" style={{ marginTop: '16px' }}>

@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react'
 import { worlds } from '../game/worlds'
 import { LevelCard } from '../components/LevelCard'
 import { Avatar } from '../components/Avatar'
@@ -8,6 +9,22 @@ import { Link } from 'react-router-dom'
 export const Levels: React.FC = () => {
   const { user, logout } = useAuth()
   const { progress } = useProgress()
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsProfileMenuOpen(false)
+      }
+    }
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isProfileMenuOpen])
 
   const allLevels = worlds.flat()
   const totalLevels = allLevels.length
@@ -59,86 +76,104 @@ export const Levels: React.FC = () => {
     </Link>
   )
 
+  const renderProfileContent = () => (
+    <>
+      <div className="home-profile-section">
+        {user ? (
+          <>
+            <Avatar 
+              username={user.username} 
+              favoriteColor={user.favoriteColor} 
+              size={147} 
+            />
+            <h2 className="home-username">{user.username}</h2>
+            <div className="home-guest-actions">
+              <button className="ghost-button home-logout-btn" onClick={logout}>
+                signOut()
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <Avatar 
+              username="Guest" 
+              size={147} 
+            />
+            <h2 className="home-username">Ghost</h2>
+            <div className="home-guest-actions">
+              <button className="ghost-button home-guest-login" onClick={handleLogin}>
+                login()
+              </button>
+              <button className="ghost-button home-guest-signup" onClick={handleSignup}>
+                signUp()
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
+      <hr className="progress-divider" />
+
+      <div className="home-stats-section">
+        <div className="home-stats-header">
+          <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Total Progress</span>
+          <span style={{ fontSize: '12px'}}>{completionPercentage}%</span>
+        </div>
+        <div className="home-progress-bar-container">
+          <div className="home-progress-bar-fill" style={{ width: `${completionPercentage}%` }} />
+        </div>
+
+        <div className="home-stats-list">
+          {statsData.map(stat => (
+            <div key={stat.label}>
+              <div className="home-stat-row">
+                <span className={stat.colorClass}>{stat.label}</span>
+                <span className="home-stat-value">{stat.count} / {stat.total}</span>
+              </div>
+              <div className="home-progress-bar-container home-progress-bar-container--secondary">
+                <div 
+                  className="home-progress-bar-fill" 
+                  style={{ 
+                    width: `${stat.total === 0 ? 0 : (stat.count / stat.total) * 100}%`, 
+                    backgroundColor: stat.bgClass,
+                    height: '12px',
+                  }} 
+                />
+              </div>
+            </div>
+          ))}
+          <div className="home-stat-row" style={{ marginTop: '8px' }}>
+            <span className="home-stat-label">Success Rate</span>
+            <span className="home-stat-value">{successRate}%</span>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <div className="app-shell home-container">
       <aside className="panel home-sidebar">
-        <div className="home-profile-section">
-          {user ? (
-            <>
-              <Avatar 
-                username={user.username} 
-                favoriteColor={user.favoriteColor} 
-                size={147} 
-              />
-              <h2 className="home-username">{user.username}</h2>
-              <div className="home-guest-actions">
-                <button className="ghost-button home-logout-btn" onClick={logout}>
-                  signOut()
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <Avatar 
-                username="Guest" 
-                size={147} 
-              />
-              <h2 className="home-username">Ghost</h2>
-              <div className="home-guest-actions">
-                <button className="ghost-button home-guest-login" onClick={handleLogin}>
-                  login()
-                </button>
-                <button className="ghost-button home-guest-signup" onClick={handleSignup}>
-                  signUp()
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-
-        <hr className="progress-divider" />
-
-        <div className="home-stats-section">
-          <div className="home-stats-header">
-            <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Total Progress</span>
-            <span style={{ fontSize: '12px'}}>{completionPercentage}%</span>
-          </div>
-          <div className="home-progress-bar-container">
-            <div className="home-progress-bar-fill" style={{ width: `${completionPercentage}%` }} />
-          </div>
-
-          <div className="home-stats-list">
-            {statsData.map(stat => (
-              <div key={stat.label}>
-                <div className="home-stat-row">
-                  <span className={stat.colorClass}>{stat.label}</span>
-                  <span className="home-stat-value">{stat.count} / {stat.total}</span>
-                </div>
-                <div className="home-progress-bar-container home-progress-bar-container--secondary">
-                  <div 
-                    className="home-progress-bar-fill" 
-                    style={{ 
-                      width: `${stat.total === 0 ? 0 : (stat.count / stat.total) * 100}%`, 
-                      backgroundColor: stat.bgClass,
-                      height: '12px',
-                    }} 
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="home-stat-row" style={{ marginTop: '8px' }}>
-              <span className="home-stat-label">Success Rate</span>
-              <span className="home-stat-value">{successRate}%</span>
-            </div>
-          </div>
-        </div>
-
-        
+        {renderProfileContent()}
       </aside>
 
       <main className="home-main">
-        <header className="app-header">
+        <header className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {appLogo}
+          <div className="mobile-only" style={{ position: 'relative' }} ref={menuRef}>
+            <button 
+              className="ghost-button" 
+              style={{ padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            >
+              <Avatar username={user ? user.username : 'Guest'} favoriteColor={user?.favoriteColor} size={35} />
+            </button>
+            {isProfileMenuOpen && (
+              <div className="mobile-profile-dropdown">
+                {renderProfileContent()}
+              </div>
+            )}
+          </div>
         </header>
         {worlds.map((worldLevels, index) => {
           if (!worldLevels || worldLevels.length === 0) return null;
