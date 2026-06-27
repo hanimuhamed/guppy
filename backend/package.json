@@ -1,7 +1,7 @@
 {
-  "name": "getsetpixel-backend",
+  "name": "guppy-backend",
   "version": "1.0.0",
-  "description": "Backend API for GetSetPixel",
+  "description": "Backend API for Guppy",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",

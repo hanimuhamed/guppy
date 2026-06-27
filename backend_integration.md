@@ -1,6 +1,6 @@
-# Backend Integration Guide for GetSetPixel
+# Backend Integration Guide for Guppy
 
-This document outlines the API endpoints and expected payload structures required to fully power the GetSetPixel frontend.
+This document outlines the API endpoints and expected payload structures required to fully power the Guppy frontend.
 
 Currently, the frontend uses a service layer (`src/api/client.ts`) that will make actual HTTP calls to a backend. The base URL is configured in that file (default `http://localhost:8080/api`).
 

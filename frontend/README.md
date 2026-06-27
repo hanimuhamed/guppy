@@ -1,6 +1,6 @@
-# GetSetPixel
+# Guppy
 
-GetSetPixel is a visual coding puzzle game inspired by pixel art and programming puzzles.
+Guppy is a visual coding puzzle game inspired by pixel art and programming puzzles.
 
 ## Stack
 

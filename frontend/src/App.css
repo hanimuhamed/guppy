@@ -24,7 +24,7 @@
 
 .app-header h1:hover {
   background-color: var(--panel);
-  cursor: grabbing;
+  cursor: pointer;
   font-weight: 600;
 }
 

@@ -9,7 +9,7 @@ export const Terms: React.FC = () => {
       
       <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>1. Acceptance of Terms</h2>
       <p style={{ marginBottom: '16px' }}>
-        By accessing and using GetSetPixel, you accept and agree to be bound by the terms and provision of this agreement.
+        By accessing and using Guppy, you accept and agree to be bound by the terms and provision of this agreement.
       </p>
 
       <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>2. User Accounts</h2>

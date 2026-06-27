@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { Avatar } from '../components/Avatar'
 import { worlds } from '../game/worlds'
+import { getWorldName } from '../constants/worlds'
 
 export const Profile: React.FC = () => {
   const { user } = useAuth()
@@ -122,7 +123,7 @@ export const Profile: React.FC = () => {
                 return (
                   <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-                      <span>World {index + 1}</span>
+                      <span>{getWorldName(index)}</span>
                       <span>{world.solved} / {world.total}</span>
                     </div>
                     <div style={{ width: '100%', height: '8px', background: 'var(--surface)', borderRadius: '4px', overflow: 'hidden' }}>

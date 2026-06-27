@@ -1,11 +1,10 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: getsetpixel
+      POSTGRES_USER: guppy
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: getsetpixel
+      POSTGRES_DB: guppy
     ports:
       - "5433:5432"
     volumes:

@@ -62,11 +62,6 @@ const saveProgress = async (req, res) => {
                 completed: completed || false
             }
         });
-        // Optionally create a submission record if we consider this a final submit attempt
-        // Currently, GetSetPixel frontend hits "saveProgress" even on partial writes/dimensions change.
-        // We only record a submission if it was specifically a 'completed = true' request,
-        // or we can just let it update the progress. We'll skip submission history for now 
-        // unless explicitly needed by a separate endpoint.
         res.json({ success: true });
     }
     catch (err) {

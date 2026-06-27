@@ -1,6 +1,6 @@
-# GetSetPixel Backend Setup Guide
+# Guppy Backend Setup Guide
 
-This document explains how to run the production backend service for GetSetPixel locally. The backend replaces the mock API previously used in the frontend and is backed by a PostgreSQL database.
+This document explains how to run the production backend service for Guppy locally. The backend replaces the mock API previously used in the frontend and is backed by a PostgreSQL database.
 
 ## Prerequisites
 

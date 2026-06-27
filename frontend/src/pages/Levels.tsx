@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
 import { Link } from 'react-router-dom'
 import { Footer } from '../components/Footer'
+import { getWorldName } from '../constants/worlds'
 
 export const Levels: React.FC = () => {
   const { user, logout } = useAuth()
@@ -160,7 +161,11 @@ export const Levels: React.FC = () => {
 
       <main className="home-main">
         <header className="app-header-sticky" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {appLogo}
+          <header className="app-header">
+            <div>
+              {appLogo}
+            </div>
+          </header>
           <div className="mobile-only" style={{ position: 'relative' }} ref={menuRef}>
             <button 
               className="ghost-button" 
@@ -181,7 +186,7 @@ export const Levels: React.FC = () => {
           return (
             <section key={index}>
               <hr className="home-divider" />
-              <h2 className="panel-header home-world-header">World {index + 1}</h2>
+              <h2 className="panel-header home-world-header">{getWorldName(index)}</h2>
               <div className="home-world-grid">
                 {worldLevels.map((level) => (
                   <LevelCard

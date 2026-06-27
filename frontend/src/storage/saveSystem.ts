@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'getsetpixel:save-v1'
+const STORAGE_KEY = 'guppy:save-v1'
 
 export type SaveState = {
   currentWorld: number

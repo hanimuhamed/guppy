@@ -14,7 +14,7 @@ export const Privacy: React.FC = () => {
 
       <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>2. How We Use Your Information</h2>
       <p style={{ marginBottom: '16px' }}>
-        Your information is used solely to provide and improve the GetSetPixel experience. We do not sell your personal data to third parties.
+        Your information is used solely to provide and improve the Guppy experience. We do not sell your personal data to third parties.
       </p>
 
       <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>3. Data Security</h2>

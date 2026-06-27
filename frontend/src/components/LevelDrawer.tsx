@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import type { LevelDefinition } from '../game/types'
 import { useProgress } from '../context/ProgressContext'
+import { getWorldName } from '../constants/worlds'
 
 interface LevelDrawerProps {
   worldLevels: LevelDefinition[]
@@ -49,7 +50,7 @@ export const LevelDrawer: React.FC<LevelDrawerProps> = ({
       }}
     >
       <div className="panel-header level-drawer-header">
-        World {worldIndex} Levels
+        {getWorldName(worldIndex - 1)} Levels
       </div>
       <div className="level-drawer-list">
         {worldLevels.map((level) => {
