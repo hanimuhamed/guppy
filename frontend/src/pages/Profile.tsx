@@ -7,7 +7,7 @@ import { Footer } from '../components/Footer'
 import { validateUsername } from '../utils/validation'
 
 export const Profile: React.FC = () => {
-  const { user, updateUser, deleteAccount, logout } = useAuth()
+  const { user, updateUser, deleteAccount} = useAuth()
   const navigate = useNavigate()
   
   const [username, setUsername] = useState('')
