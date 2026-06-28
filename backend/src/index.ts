@@ -15,6 +15,10 @@ app.use('/api/auth', authRouter)
 app.use('/api/progress', progressRouter)
 app.use('/api/users', authRouter) // getMe is essentially auth profile
 
+app.get('/api/health', (req, res) => {
+  res.status(200).send('OK')
+})
+
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err)
   res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' })

@@ -49,10 +49,18 @@ const router = createBrowserRouter([
 
 import { warmupPyWorker } from './runtime/runner'
 
+import { API_BASE_URL } from './api/client'
+import { useEffect } from 'react'
+
 // Initialize Pyodide as early as possible
 void warmupPyWorker()
 
 function App() {
+  useEffect(() => {
+    // Ping the backend on initial load to wake up Render free tier instances
+    fetch(`${API_BASE_URL}/health`).catch(() => {})
+  }, [])
+
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy-client-id'}>
       <AuthProvider>

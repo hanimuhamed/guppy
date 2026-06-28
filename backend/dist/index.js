@@ -15,6 +15,9 @@ app.use(express_1.default.json());
 app.use('/api/auth', auth_1.router);
 app.use('/api/progress', progress_1.router);
 app.use('/api/users', auth_1.router); // getMe is essentially auth profile
+app.get('/api/health', (req, res) => {
+    res.status(200).send('OK');
+});
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
