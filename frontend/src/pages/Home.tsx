@@ -133,7 +133,7 @@ export const Home: React.FC = () => {
           <p style={{ color: 'var(--text)', marginBottom: '16px' }}>
             Edit the Python code below to see how it affects the canvas instantly.
           </p>
-          <div className="main-split" style={{gap: '16px', height: '470px', paddingTop: '16px', paddingBottom: '16px'}}>
+          <div className="main-split" style={{gap: '16px', height: '470px', paddingTop: '18px', paddingBottom: '18px'}}>
             <section className="left-panel" style={{ width: '40%', border: '2px solid var(--border)', background: 'var(--panel)'}}>
               <div className="left-panel-inner"  >
                 <div className="section">
@@ -175,6 +175,10 @@ export const Home: React.FC = () => {
               />
             </section>
           </div>
+          <p style={{ marginTop: '12px', fontSize: '13px', color: 'var(--text-muted)' }}>
+            <em><span style={{color: 'var(--text)'}}>Note:</span> The entire Python interpreter (Pyodide) runs locally in your browser, which can be computationally heavy.
+            While it works on mobile devices, a desktop environment is highly recommended for the best experience, especially when writing code.</em>
+          </p>
           <hr className="home-divider" />
           <h2><span style={{color:'var(--extreme)'}}>■</span> Explore Levels</h2>
           <button className='explore-levels-btn' onClick={() => window.location.href = '/levels'}>
