@@ -1,6 +1,8 @@
-# guppy
+<a href="https://guppycode.vercel.app">
+   <img src="frontend/public/title.png" alt="guppy logo" width="200">
+</a>
 
-<img src="frontend/public/title.png" alt="guppy logo">
+**Live Demo:** [guppycode.vercel.app](https://guppycode.vercel.app)
 
 ---
 
