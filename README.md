@@ -1,5 +1,9 @@
 # guppy
 
+<img src="frontend/public/title.png" alt="guppy logo">
+
+---
+
 `guppy` is a programming puzzle game where you recreate pixel art by writing Python code. The target images dynamically change with the canvas dimensions, so your solutions must be mathematically robust and work for any valid size.
 
 ## How to Play
@@ -8,6 +12,12 @@
 *   **Code:** Write Python code to recreate it using the built-in Monaco Editor.
 *   **Test:** Drag the dimension sliders to test your solution across different canvas sizes.
 *   **Solve:** Pass the level by producing the correct output for every valid size.
+
+---
+
+<img src="frontend/public/example.png" alt="guppy screenshot">
+
+---
 
 ## Tech Stack
 
