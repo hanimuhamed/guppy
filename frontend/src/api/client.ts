@@ -1,4 +1,7 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api'
+let _base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api'
+if (_base.endsWith('/')) _base = _base.slice(0, -1)
+if (!_base.endsWith('/api')) _base += '/api'
+export const API_BASE_URL = _base
 
 export interface User {
   id: string
