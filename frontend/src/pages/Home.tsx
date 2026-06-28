@@ -133,7 +133,7 @@ export const Home: React.FC = () => {
           <p style={{ color: 'var(--text)', marginBottom: '16px' }}>
             Edit the Python code below to see how it affects the canvas instantly.
           </p>
-          <div className="main-split" style={{gap: '16px', height: '470px', paddingTop: '18px', paddingBottom: '18px'}}>
+          <div className="main-split" style={{gap: '16px', height: '470px', paddingTop: '18px', paddingBottom: '18px', paddingInline: '0px'}}>
             <section className="left-panel" style={{ width: '40%', border: '2px solid var(--border)', background: 'var(--panel)'}}>
               <div className="left-panel-inner"  >
                 <div className="section">
