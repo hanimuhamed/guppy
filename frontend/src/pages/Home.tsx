@@ -118,18 +118,7 @@ export const Home: React.FC = () => {
             </code> is a programming puzzle game where you recreate pixel art by
             writing <a style={{ color: 'var(--primary)', textDecoration: 'underline' }} href="https://docs.python.org/3/" target="_blank" rel="noopener noreferrer">Python</a> code.<br/>
             The target images change with the canvas dimensions, so your solutions 
-            must work for any valid size.<br/>
-            Use the built-in function <code>setPixel
-              <span style={{color: 'var(--accent)'}}>(</span>
-              x, y, 
-              <span style={{color: 'var(--string)'}}>'#RRGGBB'</span>
-              <span style={{color: 'var(--accent)'}}>)</span>
-            </code> to 
-            set the color of a pixel at coordinates <code>
-              <span style={{color: 'var(--accent)'}}>(</span>
-              x, y
-              <span style={{color: 'var(--accent)'}}>)</span>
-            </code>.
+            must work for any valid size.
           </p>
           <hr className="home-divider" />
           <h2><span className='color-accent'>■</span> How to Play</h2>

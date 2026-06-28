@@ -8,3 +8,5 @@ exports.router = (0, express_1.Router)();
 exports.router.post('/signup', auth_1.signup);
 exports.router.post('/login', auth_1.login);
 exports.router.get('/me', auth_2.authenticate, auth_1.getMe);
+exports.router.put('/me', auth_2.authenticate, auth_1.updateMe);
+exports.router.delete('/me', auth_2.authenticate, auth_1.deleteMe);

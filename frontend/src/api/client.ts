@@ -42,6 +42,8 @@ export const api = {
   signup: (data: any): Promise<{ token: string, user: User }> => request('/auth/signup', { method: 'POST', body: JSON.stringify(data) }) as any,
   login: (data: any): Promise<{ token: string, user: User }> => request('/auth/login', { method: 'POST', body: JSON.stringify(data) }) as any,
   getMe: (): Promise<User> => request('/users/me', { method: 'GET' }) as any,
+  updateMe: (data: { username?: string, favoriteColor?: string }): Promise<User> => request('/users/me', { method: 'PUT', body: JSON.stringify(data) }) as any,
+  deleteMe: (): Promise<{ success: boolean }> => request('/users/me', { method: 'DELETE' }) as any,
   getProgress: (): Promise<Progress> => request('/progress', { method: 'GET' }) as any,
   saveProgress: (data: any): Promise<{ success: boolean }> => request('/progress', { method: 'POST', body: JSON.stringify(data) }) as any,
 }

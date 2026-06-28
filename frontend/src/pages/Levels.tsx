@@ -90,6 +90,9 @@ export const Levels: React.FC = () => {
             />
             <h2 className="home-username">{user.username}</h2>
             <div className="home-guest-actions">
+              <button className="ghost-button home-logout-btn" onClick={() => window.location.href = '/profile'}>
+                edit()
+              </button>
               <button className="ghost-button home-logout-btn" onClick={logout}>
                 signOut()
               </button>

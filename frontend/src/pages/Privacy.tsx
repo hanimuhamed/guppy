@@ -17,7 +17,12 @@ export const Privacy: React.FC = () => {
         Your information is used solely to provide and improve the Guppy experience. We do not sell your personal data to third parties.
       </p>
 
-      <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>3. Data Security</h2>
+      <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>3. Data Deletion</h2>
+      <p style={{ marginBottom: '16px' }}>
+        You have the right to permanently delete your account and all associated data at any time. This can be done via the Delete Account option in your Profile settings.
+      </p>
+
+      <h2 style={{ marginTop: '24px', marginBottom: '12px' }}>4. Data Security</h2>
       <p style={{ marginBottom: '16px' }}>
         We employ industry-standard security measures to protect your data. By outsourcing authentication to Google, we ensure that your account credentials remain fully secured.
       </p>

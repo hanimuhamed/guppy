@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { Avatar } from '../components/Avatar'
 import { Footer } from '../components/Footer'
 import { useGoogleLogin } from '@react-oauth/google'
+import { validateUsername } from '../utils/validation'
 
 export const Signup: React.FC = () => {
   const [username, setUsername] = useState('')
@@ -27,8 +28,9 @@ export const Signup: React.FC = () => {
   })
 
   const onGoogleClick = () => {
-    if (!username) {
-      setError('Please enter a username first')
+    const validationError = validateUsername(username)
+    if (validationError) {
+      setError(validationError)
       return
     }
     setError('')
