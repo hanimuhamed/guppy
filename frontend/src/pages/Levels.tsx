@@ -4,13 +4,14 @@ import { LevelCard } from '../components/LevelCard'
 import { Avatar } from '../components/Avatar'
 import { useAuth } from '../context/AuthContext'
 import { useProgress } from '../context/ProgressContext'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Footer } from '../components/Footer'
 import { getWorldName } from '../constants/worlds'
 
 export const Levels: React.FC = () => {
   const { user, logout } = useAuth()
   const { progress } = useProgress()
+  const navigate = useNavigate()
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -55,11 +56,11 @@ export const Levels: React.FC = () => {
   })
 
   const handleLogin = () => {
-    window.location.href = '/login'
+    navigate('/login')
   }
 
   const handleSignup = () => {
-    window.location.href = '/signup'
+    navigate('/signup')
   }
 
   const statsData = [
@@ -90,7 +91,7 @@ export const Levels: React.FC = () => {
             />
             <h2 className="home-username">{user.username}</h2>
             <div className="home-guest-actions">
-              <button className="ghost-button home-logout-btn" onClick={() => window.location.href = '/profile'}>
+              <button className="ghost-button home-logout-btn" onClick={() => navigate('/profile')}>
                 edit()
               </button>
               <button className="ghost-button home-logout-btn" onClick={logout}>

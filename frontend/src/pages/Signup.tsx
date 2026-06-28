@@ -12,19 +12,25 @@ export const Signup: React.FC = () => {
   const [favoriteColor, setFavoriteColor] = useState('#FF5C5C')
   const [showColorPicker, setShowColorPicker] = useState(false)
   const [error, setError] = useState('')
+  const [isAuthenticating, setIsAuthenticating] = useState(false)
   const { signup } = useAuth()
   const navigate = useNavigate()
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      setIsAuthenticating(true)
       try {
         await signup({ token: tokenResponse.access_token, username, favoriteColor })
         navigate('/levels')
       } catch (err: any) {
         setError(err.message || 'Failed to sign up')
+        setIsAuthenticating(false)
       }
     },
-    onError: () => setError('Google Sign Up Failed')
+    onError: () => {
+      setError('Google Sign Up Failed')
+      setIsAuthenticating(false)
+    }
   })
 
   const onGoogleClick = () => {
@@ -86,12 +92,13 @@ export const Signup: React.FC = () => {
             <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
               {error && <div className="auth-error" style={{ marginBottom: '16px' }}>{error}</div>}
               
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', opacity: username ? 1 : 0.5, transition: 'opacity 0.2s' }}>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', opacity: (username && !isAuthenticating) ? 1 : 0.5, transition: 'opacity 0.2s' }}>
                 <button 
                   type="button" 
                   className="auth-submit" 
                   onClick={onGoogleClick}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: username ? 'pointer' : 'not-allowed' }}
+                  disabled={isAuthenticating || !username}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: (username && !isAuthenticating) ? 'pointer' : 'not-allowed' }}
                 >
                   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{ width: '20px', height: '20px' }}>
                     <path fill="currentColor" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
@@ -100,7 +107,7 @@ export const Signup: React.FC = () => {
                     <path fill="currentColor" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
                     <path fill="none" d="M0 0h48v48H0z"></path>
                   </svg>
-                  Sign Up with Google
+                  {isAuthenticating ? 'Authenticating...' : 'Sign Up with Google'}
                 </button>
               </div>
             </div>

@@ -6,19 +6,26 @@ import { useGoogleLogin } from '@react-oauth/google'
 
 export const Login: React.FC = () => {
   const [error, setError] = useState('')
+  const [isAuthenticating, setIsAuthenticating] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      setIsAuthenticating(true)
+      setError('')
       try {
         await login({ token: tokenResponse.access_token })
         navigate('/levels')
       } catch (err: any) {
         setError(err.message || 'Failed to login')
+        setIsAuthenticating(false)
       }
     },
-    onError: () => setError('Google Login Failed')
+    onError: () => {
+      setError('Google Login Failed')
+      setIsAuthenticating(false)
+    }
   })
 
   return (
@@ -33,7 +40,8 @@ export const Login: React.FC = () => {
             type="button" 
             className="auth-submit" 
             onClick={() => handleGoogleLogin()}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            disabled={isAuthenticating}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: isAuthenticating ? 0.7 : 1, cursor: isAuthenticating ? 'not-allowed' : 'pointer' }}
           >
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style={{ width: '20px', height: '20px' }}>
               <path fill="currentColor" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
@@ -42,7 +50,7 @@ export const Login: React.FC = () => {
               <path fill="currentColor" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
               <path fill="none" d="M0 0h48v48H0z"></path>
             </svg>
-            Sign In with Google
+            {isAuthenticating ? 'Authenticating...' : 'Sign In with Google'}
           </button>
           {error && <div className="auth-error" style={{ marginTop: '16px' }}>{error}</div>}
         </div>

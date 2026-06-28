@@ -90,7 +90,11 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   if (loading || authLoading) {
-    return <div>Loading...</div>
+    return (
+      <div style={{ display: 'flex', width: '100vw', height: '100vh', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontSize: '18px' }}>
+        Loading...
+      </div>
+    )
   }
 
   return (
