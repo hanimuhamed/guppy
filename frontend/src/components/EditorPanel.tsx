@@ -46,7 +46,7 @@ const EditorPanel = ({
             onClick={onRun}
             disabled={isRunning}
             aria-label="Run code"
-            title="Run (Ctrl+Enter)"
+            title="Run code"
           >
             {/* Play triangle */}
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -55,7 +55,7 @@ const EditorPanel = ({
                 fill="currentColor"
               />
             </svg>
-            <span>RUN</span>
+            <span>run()</span>
           </button>
           <button
             type="button"

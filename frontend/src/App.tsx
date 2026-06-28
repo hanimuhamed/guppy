@@ -8,6 +8,7 @@ import { Levels } from './pages/Levels'
 import { LevelPage } from './pages/LevelPage'
 import { Terms } from './pages/Terms'
 import { Privacy } from './pages/Privacy'
+import { NotFound } from './pages/NotFound'
 import { AuthProvider } from './context/AuthContext'
 import { ProgressProvider } from './context/ProgressContext'
 import './App.css'
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: '/privacy',
     element: <Privacy />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ])
 
