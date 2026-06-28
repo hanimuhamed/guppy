@@ -1,12 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateUsername = void 0;
-const bad_words_1 = require("bad-words");
-const filter = new bad_words_1.Filter();
+const bad_words_1 = __importDefault(require("bad-words"));
+const filter = new bad_words_1.default();
 const RESERVED_USERNAMES = [
     'admin', 'administrator', 'root', 'system', 'guest', 'ghost', 'support',
     'api', 'www', 'null', 'undefined', 'owner', 'staff', 'moderator', 'mod',
-    'developer', 'dev'
+    'developer', 'dev', 'guppy', 'test', 'profile', 'account', 'user',
 ];
 const validateUsername = (username) => {
     if (!username)
