@@ -28,7 +28,7 @@ export const world1Levels: LevelDefinition[] = [
         </p>
 
         <p>
-          Use <code>setPixel<span style={{color: '#ffd700'}}>(</span>x, y, <span style={{color: 'var(--string)'}}>'#RRGGBB'</span><span style={{color: '#ffd700'}}>)</span></code> to set the pixel color at
+          Use <code>setpixel<span style={{color: '#ffd700'}}>(</span>x, y, <span style={{color: 'var(--string)'}}>'#RRGGBB'</span><span style={{color: '#ffd700'}}>)</span></code> to set the pixel color at
           position <code><span style={{color: '#ffd700'}}>(</span>x, y<span style={{color: '#ffd700'}}>)</span></code>.
         </p>
 
@@ -58,7 +58,7 @@ export const world1Levels: LevelDefinition[] = [
       },
       {
         id: 5,
-        description: 'Use setPixel(width//2, height//2, \'#ffd700\')',
+        description: 'Use setpixel(width//2, height//2, \'#ffd700\')',
       }
     ],
     minimumWidth: 3,

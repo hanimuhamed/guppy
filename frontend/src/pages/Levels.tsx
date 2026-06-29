@@ -111,7 +111,7 @@ export const Levels: React.FC = () => {
                 login()
               </button>
               <button className="ghost-button home-guest-signup" onClick={handleSignup}>
-                signUp()
+                signup()
               </button>
             </div>
           </>
@@ -204,6 +204,7 @@ export const Levels: React.FC = () => {
           )
         })}
         <hr className="home-divider" />
+        <h2 className="panel-header home-world-header" style={{color: 'var(--text-dimmed)'}}>MORE LEVELS UNDER CONSTRUCTION</h2>
         <Footer/>
       </main>
     </div>

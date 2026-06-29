@@ -128,7 +128,7 @@ self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
 
     pyodide.globals.set('WIDTH', width)
     pyodide.globals.set('HEIGHT', height)
-    pyodide.globals.set('setPixel', (x: number, y: number, colorInput: unknown) => {
+    pyodide.globals.set('setpixel', (x: number, y: number, colorInput: unknown) => {
       const color = parseColorInput(colorInput)
       if (!color) {
         return
