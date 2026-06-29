@@ -20,6 +20,15 @@ export const getAuthToken = () => localStorage.getItem('token')
 export const setAuthToken = (token: string) => localStorage.setItem('token', token)
 export const clearAuthToken = () => localStorage.removeItem('token')
 
+export const getCachedUser = (): User | null => {
+  try {
+    const val = localStorage.getItem('user')
+    return val ? JSON.parse(val) : null
+  } catch { return null }
+}
+export const setCachedUser = (user: User) => localStorage.setItem('user', JSON.stringify(user))
+export const clearCachedUser = () => localStorage.removeItem('user')
+
 const request = async (endpoint: string, options: RequestInit = {}) => {
   const token = getAuthToken()
   const headers = {

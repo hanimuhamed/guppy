@@ -19,7 +19,7 @@ const ProgressContext = createContext<ProgressContextType | undefined>(undefined
 export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading: authLoading } = useAuth()
   const [progress, setProgress] = useState<SaveState>(loadSaveState())
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const prevUser = React.useRef(user)
 

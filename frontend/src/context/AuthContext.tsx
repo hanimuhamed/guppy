@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { api, clearAuthToken, getAuthToken, setAuthToken } from '../api/client'
+import { api, clearAuthToken, getAuthToken, setAuthToken, getCachedUser, setCachedUser, clearCachedUser } from '../api/client'
 import type { User } from '../api/client'
 import { clearSaveState } from '../storage/saveSystem'
 
@@ -16,41 +16,49 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(getCachedUser())
+  const loading = false
 
   useEffect(() => {
     const token = getAuthToken()
     if (token) {
       api.getMe()
-        .then(setUser)
-        .catch(() => clearAuthToken())
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false)
+        .then(u => {
+          setUser(u)
+          setCachedUser(u)
+        })
+        .catch(() => {
+          clearAuthToken()
+          clearCachedUser()
+          setUser(null)
+        })
     }
   }, [])
 
   const login = async (data: any) => {
     const res = await api.login(data)
     setAuthToken(res.token)
+    setCachedUser(res.user)
     setUser(res.user)
   }
 
   const signup = async (data: any) => {
     const res = await api.signup(data)
     setAuthToken(res.token)
+    setCachedUser(res.user)
     setUser(res.user)
   }
 
   const logout = () => {
     clearAuthToken()
+    clearCachedUser()
     clearSaveState()
     setUser(null)
   }
 
   const updateUser = async (data: { username?: string, favoriteColor?: string }) => {
     const updatedUser = await api.updateMe(data)
+    setCachedUser(updatedUser)
     setUser(updatedUser)
   }
 
